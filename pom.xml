@@ -19,6 +19,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>homework-01</module>
+        <module>lesson-01</module>
+        <module>lesson-02</module>
     </modules>
 </project>
