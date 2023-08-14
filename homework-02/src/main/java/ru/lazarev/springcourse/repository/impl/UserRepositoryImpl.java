@@ -2,7 +2,7 @@ package ru.lazarev.springcourse.repository.impl;
 
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import ru.lazarev.springcourse.domain.User;
 import ru.lazarev.springcourse.repository.UserRepository;
 
@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@Repository
+@Component
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserRepositoryImpl implements UserRepository {
 

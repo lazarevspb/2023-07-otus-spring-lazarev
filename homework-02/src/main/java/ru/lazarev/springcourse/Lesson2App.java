@@ -5,7 +5,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import ru.lazarev.springcourse.service.ApplicationRunner;
 
-@ComponentScan("ru.lazarev.springcourse")
+@ComponentScan
 @PropertySource("classpath:application.properties")
 public class Lesson2App {
 

@@ -24,8 +24,8 @@ public class PrinterImpl implements Printer {
     private String getFormatString(Question question) {
         return MessageFormat
                 .format(QUESTION_FORMAT_STRING,
-                        question.getQuestion(),
-                        question.getAnswers().stream()
+                        question.question(),
+                        question.answers().stream()
                                 .collect(Collectors
                                         .joining(", ", ANSWERS_OPTIONS_STRING, ";\n")).replace("\r", ""));
     }
