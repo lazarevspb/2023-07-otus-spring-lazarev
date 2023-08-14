@@ -9,29 +9,28 @@ import org.springframework.stereotype.Component;
 import ru.lazarev.springcourse.domain.User;
 import ru.lazarev.springcourse.service.AnswerService;
 import ru.lazarev.springcourse.service.IOService;
+import ru.lazarev.springcourse.service.LocalizationService;
 import ru.lazarev.springcourse.service.TestingService;
 import ru.lazarev.springcourse.service.UserService;
-
-import java.text.MessageFormat;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 @Component
 public class ApplicationRunnerImpl implements ApplicationRunner {
 
-    public static final String INTRODUCTION_MESSAGE = "{0} {1} please choose the correct answer number:";
+    public static final String INTRODUCTION_MESSAGE = "introduction.message";
 
-    public static final String ENTER_FIRST_NAME_MESSAGE = "Enter your first name: ";
+    public static final String ENTER_FIRST_NAME_MESSAGE = "enter.first.name.message";
 
-    public static final String ENTER_LAST_NAME_MESSAGE = "Enter your last name: ";
+    public static final String ENTER_LAST_NAME_MESSAGE = "enter.last.name.message";
 
-    public static final String YOUR_RESULT_MESSAGE = "Your result: ";
+    public static final String YOUR_RESULT_MESSAGE = "your.result.message";
 
-    public static final String GREETING_MESSAGE = "Welcome to the testing program!";
+    public static final String GREETING_MESSAGE = "greeting.message";
 
-    public static final String TEST_PASSED_MESSAGE = "Test passed!";
+    public static final String TEST_PASSED_MESSAGE = "test.passed.message";
 
-    public static final String FAILED_TEST_MESSAGE = "You failed the test";
+    public static final String FAILED_TEST_MESSAGE = "failed.test.message";
 
 
     IOService ioService;
@@ -41,6 +40,8 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
     UserService userService;
 
     AnswerService answerService;
+
+    LocalizationService localizationService;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -58,9 +59,9 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
 
     private void printResult(User user) {
         if (answerService.isPassedTest(user)) {
-            print(TEST_PASSED_MESSAGE);
+            print(localizationService.getMessage(TEST_PASSED_MESSAGE));
         } else {
-            print(FAILED_TEST_MESSAGE);
+            print(localizationService.getMessage(FAILED_TEST_MESSAGE));
         }
     }
 
@@ -69,21 +70,21 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
     }
 
     private void printCountRightAnswers(long count) {
-        print(YOUR_RESULT_MESSAGE + count);
+        print(localizationService.getMessage(YOUR_RESULT_MESSAGE) + count);
     }
 
     private void showIntroduction(User user) {
-        print(MessageFormat.format(INTRODUCTION_MESSAGE, user.getFirstName(),
-                                   user.getSecondName()));
+        print(localizationService.getMessage(INTRODUCTION_MESSAGE, user.getFirstName(),
+                                             user.getSecondName()));
     }
 
     private User inputUserDataAndCreateUser() {
-        String firstName = ioService.readStringWithPrompt(ENTER_FIRST_NAME_MESSAGE);
-        String lastName = ioService.readStringWithPrompt(ENTER_LAST_NAME_MESSAGE);
+        String firstName = ioService.readStringWithPrompt(localizationService.getMessage(ENTER_FIRST_NAME_MESSAGE));
+        String lastName = ioService.readStringWithPrompt(localizationService.getMessage(ENTER_LAST_NAME_MESSAGE));
         return userService.save(new User(null, firstName, lastName));
     }
 
     private void showGreeting() {
-        print(GREETING_MESSAGE);
+        print(localizationService.getMessage(GREETING_MESSAGE));
     }
 }
