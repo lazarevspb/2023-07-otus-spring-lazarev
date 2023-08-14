@@ -5,7 +5,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import ru.lazarev.springcourse.parser.Parser;
 import ru.lazarev.springcourse.reader.Reader;
 import ru.lazarev.springcourse.service.AnswerService;
-import ru.lazarev.springcourse.service.ApplicationRunner;
 import ru.lazarev.springcourse.service.IOService;
 import ru.lazarev.springcourse.service.InputService;
 import ru.lazarev.springcourse.service.OutputService;
@@ -25,7 +24,6 @@ class Lesson5AppTest {
         assertNotNull(context.getBean(TestingService.class));
         assertNotNull(context.getBean(QuestionService.class));
         assertNotNull(context.getBean(AnswerService.class));
-        assertNotNull(context.getBean(ApplicationRunner.class));
         assertNotNull(context.getBean(InputService.class));
         assertNotNull(context.getBean(IOService.class));
         assertNotNull(context.getBean(OutputService.class));

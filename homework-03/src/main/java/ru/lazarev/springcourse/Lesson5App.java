@@ -1,17 +1,12 @@
 package ru.lazarev.springcourse;
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.PropertySource;
-import ru.lazarev.springcourse.service.ApplicationRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@ComponentScan
-@PropertySource("classpath:application.properties")
+@SpringBootApplication
 public class Lesson5App {
 
     public static void main(String[] args) {
-        var context = new AnnotationConfigApplicationContext(Lesson5App.class);
-        context.getBean(ApplicationRunner.class).run();
-        context.close();
+        SpringApplication.run(Lesson5App.class, args);
     }
 }

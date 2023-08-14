@@ -3,10 +3,11 @@ package ru.lazarev.springcourse.service.impl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 import ru.lazarev.springcourse.domain.User;
 import ru.lazarev.springcourse.service.AnswerService;
-import ru.lazarev.springcourse.service.ApplicationRunner;
 import ru.lazarev.springcourse.service.IOService;
 import ru.lazarev.springcourse.service.TestingService;
 import ru.lazarev.springcourse.service.UserService;
@@ -42,7 +43,7 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
     AnswerService answerService;
 
     @Override
-    public void run() {
+    public void run(ApplicationArguments args) {
         showGreeting();
         var user = inputUserDataAndCreateUser();
         showIntroduction(user);
@@ -53,6 +54,7 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
 
         printResult(user);
     }
+
 
     private void printResult(User user) {
         if (answerService.isPassedTest(user)) {
@@ -72,7 +74,7 @@ public class ApplicationRunnerImpl implements ApplicationRunner {
 
     private void showIntroduction(User user) {
         print(MessageFormat.format(INTRODUCTION_MESSAGE, user.getFirstName(),
-                                 user.getSecondName()));
+                                   user.getSecondName()));
     }
 
     private User inputUserDataAndCreateUser() {
