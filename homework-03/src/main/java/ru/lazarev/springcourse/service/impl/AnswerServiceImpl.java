@@ -46,6 +46,6 @@ public class AnswerServiceImpl implements AnswerService {
 
     private static boolean isRightAnswer(int i, UserAnswers userAnswers) {
         return userAnswers.getNumbersUserAnswersList().get(i)
-            .equals(userAnswers.getQuestions().get(i).getNumberCorrectAnswer());
+            .equals(userAnswers.getQuestions().get(i).numberCorrectAnswer());
     }
 }
