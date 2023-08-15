@@ -41,24 +41,26 @@ public class TestingServiceImpl implements TestingService {
         saveQuestionsAndUserAnswers(user, userAnswersList, questions);
     }
 
+    private String getFormatString(Question question) {
+        return localizationService.getMessage(QUESTION_FORMAT_STRING,
+                                              question.question(),
+                                              question.answers().stream()
+                                                  .collect(Collectors
+                                                               .joining(", ", localizationService.getMessage(
+                                                                   ANSWERS_OPTIONS_STRING), ";\n"))
+                                                  .replace("\r", ""));
+    }
+
+
     private void addUserAnswerInList(Question question, List<Integer> userAnswersList) {
         userAnswersList.add(ioService.readIntWithPrompt(getFormatString(question)));
     }
 
     private void saveQuestionsAndUserAnswers(User user, List<Integer> userAnswersList, List<Question> questionsList) {
-        var userAnswers = new UserAnswers();
-        userAnswers.setUser(user);
-        userAnswers.setNumbersUserAnswersList(userAnswersList);
-        userAnswers.setQuestions(questionsList);
-        userAnswerRepository.save(userAnswers);
-    }
-
-    public String getFormatString(Question question) {
-        return localizationService.getMessage(QUESTION_FORMAT_STRING,
-                                              question.question(),
-                                              question.answers().stream()
-                                                  .collect(Collectors
-                                                               .joining(", ", localizationService.getMessage(ANSWERS_OPTIONS_STRING), ";\n"))
-                                                  .replace("\r", ""));
+        userAnswerRepository.save(UserAnswers.builder()
+                                      .user(user)
+                                      .numbersUserAnswersList(userAnswersList)
+                                      .questions(questionsList)
+                                      .build());
     }
 }

@@ -34,18 +34,17 @@ public class AnswerServiceImpl implements AnswerService {
             .count();
     }
 
-    private UserAnswers getUserAnswers(User user) {
-        return userAnswerRepository.getByUser(user);
-    }
-
     @Override
     public boolean isPassedTest(User user) {
         return calculateCountRightAnswers(user) >= countRightAnswers;
     }
 
-
     private static boolean isRightAnswer(int i, UserAnswers userAnswers) {
         return userAnswers.getNumbersUserAnswersList().get(i)
             .equals(userAnswers.getQuestions().get(i).numberCorrectAnswer());
+    }
+
+    private UserAnswers getUserAnswers(User user) {
+        return userAnswerRepository.getByUser(user);
     }
 }

@@ -1,5 +1,7 @@
 package ru.lazarev.springcourse.service.impl;
 
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
 import ru.lazarev.springcourse.service.IOService;
 
@@ -7,10 +9,12 @@ import java.io.PrintStream;
 import java.util.Scanner;
 
 @Component
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class IOServiceStreamsImpl implements IOService {
-    private final PrintStream output;
 
-    private final Scanner input;
+    PrintStream output;
+
+    Scanner input;
 
     public IOServiceStreamsImpl() {
         output = System.out;

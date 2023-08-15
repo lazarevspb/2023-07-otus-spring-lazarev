@@ -72,12 +72,11 @@ class AnswerServiceImplTest {
     }
 
     private UserAnswers getUserAnswers(List<Integer> numberUserAncwersList) {
-        var userAnswers = new UserAnswers();
-
-        userAnswers.setNumbersUserAnswersList(numberUserAncwersList);
-        userAnswers.setQuestions(getQuestionsList(1, 1, 1, 3, 3));
-        userAnswers.setUser(getUser());
-        return userAnswers;
+        return UserAnswers.builder()
+            .numbersUserAnswersList(numberUserAncwersList)
+            .questions(getQuestionsList(1, 1, 1, 3, 3))
+            .user(getUser())
+            .build();
     }
 
     private List<Question> getQuestionsList(Integer... numberRightAnswer) {
