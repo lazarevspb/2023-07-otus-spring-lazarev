@@ -1,0 +1,12 @@
+url:
+  qa:
+    file: qa
+
+number:
+  correct:
+    answer: 3
+
+io:
+  locale: en-US
+  autoconfiguration:
+    enabled: true
