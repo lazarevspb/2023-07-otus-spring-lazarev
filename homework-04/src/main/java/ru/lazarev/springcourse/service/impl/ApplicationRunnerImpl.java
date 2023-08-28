@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import ru.lazarev.springcourse.domain.User;
 import ru.lazarev.springcourse.service.AnswerService;
@@ -16,6 +17,7 @@ import ru.lazarev.springcourse.service.UserService;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 @Component
+@Primary
 public class ApplicationRunnerImpl implements ApplicationRunner {
 
     public static final String INTRODUCTION_MESSAGE = "introduction.message";

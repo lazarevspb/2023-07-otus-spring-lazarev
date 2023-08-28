@@ -1,13 +1,19 @@
 package ru.lazarev.springcourse.service.impl;
 
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ContextConfiguration;
 import ru.lazarev.springcourse.domain.Question;
 import ru.lazarev.springcourse.domain.User;
 import ru.lazarev.springcourse.domain.UserAnswers;
 import ru.lazarev.springcourse.repository.UserAnswerRepository;
+import ru.lazarev.springcourse.service.AnswerService;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,14 +27,20 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ContextConfiguration(classes = AnswerServiceImpl.class)
+@SpringBootTest
+@FieldDefaults(level = AccessLevel.PRIVATE)
 class AnswerServiceImplTest {
 
     public static final List<Integer> THREE_CORRECT_ANSWERS_LIST = List.of(1, 1, 1, 2, 2);
     public static final List<Integer> TWO_CORRECT_ANSWERS_LIST = List.of(1, 1, 2, 1, 1);
     public static final long COUNT_RIGHT_ANSWERS = 3L;
-    UserAnswerRepository userAnswerRepository = Mockito.mock(UserAnswerRepository.class);
 
-    AnswerServiceImpl answerService;
+    @MockBean
+    UserAnswerRepository userAnswerRepository;
+
+    @Autowired
+    AnswerService answerService;
 
     @BeforeAll
     public void setUp() {
