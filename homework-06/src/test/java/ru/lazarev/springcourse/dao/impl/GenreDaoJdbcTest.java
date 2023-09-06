@@ -5,14 +5,17 @@ import lombok.experimental.FieldDefaults;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;
 import ru.lazarev.springcourse.domain.Genre;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@JdbcTest
+@DataJpaTest
 @Import(GenreDaoJdbc.class)
 @FieldDefaults(level = AccessLevel.PRIVATE)
+//@Profile("test")
 class GenreDaoJdbcTest {
 
     public static final int EXPECTED_SIZE = 2;
