@@ -1,14 +1,15 @@
 package ru.lazarev.springcourse.dao;
 
 import ru.lazarev.springcourse.domain.Book;
+import ru.lazarev.springcourse.dto.BookDto;
 
 import java.util.List;
 
 public interface BookDao {
 
-    List<Book> findAll();
+    List<BookDto> findAll();
 
-    Book findById(Long id);
+    BookDto findById(Long id);
 
     void save(Book book);
 

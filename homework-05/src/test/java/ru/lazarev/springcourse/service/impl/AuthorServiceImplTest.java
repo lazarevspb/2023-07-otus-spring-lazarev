@@ -18,7 +18,6 @@ import ru.lazarev.springcourse.service.AuthorService;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ContextConfiguration(classes = {AuthorServiceImpl.class, AuthorMapperImpl.class})
@@ -46,15 +45,6 @@ class AuthorServiceImplTest {
         var actual = service.getAllAuthor();
 
         assertEquals(getAuthorDtoList(), actual);
-    }
-
-    @Test
-    void findAuthorById() {
-        when(dao.findById(eq(1L))).thenReturn(getAuthor());
-
-        var actual = service.findAuthorById(1L);
-
-        assertEquals(getAuthorDto(), actual);
     }
 
     private List<Author> getAuthorList() {

@@ -21,12 +21,6 @@ public class AuthorDaoJdbc implements AuthorDao {
     JdbcOperations jdbcOperations;
 
     @Override
-    public Author findById(Long id) {
-        return jdbcOperations.queryForObject("SELECT id, name FROM authors WHERE id = ?", new Object[]{id},
-                                             new AuthorRowMapper());
-    }
-
-    @Override
     public List<Author> findAll() {
         String sql = "SELECT id, name FROM authors";
         return jdbcOperations.query(sql, new AuthorDaoJdbc.AuthorRowMapper());

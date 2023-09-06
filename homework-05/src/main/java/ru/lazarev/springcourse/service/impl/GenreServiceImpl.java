@@ -27,9 +27,4 @@ public class GenreServiceImpl implements GenreService {
             .map(mapper::map)
             .toList();
     }
-
-    @Override
-    public GenreDto findGenreById(Long id) {
-        return mapper.map(dao.findById(id));
-    }
 }

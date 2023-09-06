@@ -6,7 +6,5 @@ import java.util.List;
 
 public interface GenreDao {
 
-    Genre findById(Long id);
-
     List<Genre> findAll();
 }

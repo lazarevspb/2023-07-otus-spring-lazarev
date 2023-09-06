@@ -18,7 +18,6 @@ import ru.lazarev.springcourse.service.GenreService;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith({SpringExtension.class})
@@ -46,15 +45,6 @@ class GenreServiceImplTest {
         var actual = service.getAllGenre();
 
         assertEquals(getGenreDtoList(), actual);
-    }
-
-    @Test
-    void findGenreById() {
-        when(dao.findById(eq(1L))).thenReturn(getGenre());
-
-        var actual = service.findGenreById(1L);
-
-        assertEquals(getGenreDto(), actual);
     }
 
     private List<Genre> getGenreList() {

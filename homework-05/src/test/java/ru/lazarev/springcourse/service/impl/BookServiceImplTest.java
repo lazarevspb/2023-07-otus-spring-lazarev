@@ -87,8 +87,6 @@ class BookServiceImplTest {
     @Test
     void getAllBook() {
         when(bookDao.findAll()).thenReturn(getBookList());
-        when(authorService.findAuthorById(eq(AUTHOR_ID))).thenReturn(new AuthorDto(AUTHOR_ID, AUTHOR_NAME));
-        when(genreService.findGenreById(eq(GENRE_ID))).thenReturn(new GenreDto(GENRE_ID, GENRE_NAME));
 
         var actual = service.findAllBooks();
 
@@ -97,29 +95,36 @@ class BookServiceImplTest {
 
     @Test
     void findBookById() {
-        when(bookDao.findById(eq(AUTHOR_ID))).thenReturn(getBook());
-        when(authorService.findAuthorById(eq(AUTHOR_ID))).thenReturn(new AuthorDto(AUTHOR_ID, AUTHOR_NAME));
-        when(genreService.findGenreById(eq(GENRE_ID))).thenReturn(new GenreDto(GENRE_ID, GENRE_NAME));
+        when(bookDao.findById(eq(AUTHOR_ID))).thenReturn(getBookDto());
 
         var actual = service.findBookById(AUTHOR_ID);
 
         assertEquals(getBookDto(), actual);
     }
 
-    private List<Book> getBookList() {
-        return List.of(getBook());
+    private List<BookDto> getBookList() {
+        return List.of(getBookDto());
     }
 
     private Book getBook() {
         return new Book(Book_ID, Book_NAME, AUTHOR_ID, GENRE_ID);
     }
 
+
     private List<BookDto> getBookDtoList() {
         return List.of(getBookDto());
     }
 
     private BookDto getBookDto() {
-        return new BookDto(Book_ID, Book_NAME, new AuthorDto(AUTHOR_ID, AUTHOR_NAME),
-                           new GenreDto(GENRE_ID, GENRE_NAME));
+        return new BookDto(Book_ID, Book_NAME, getAuthor(),
+                           getGenre());
+    }
+
+    private GenreDto getGenre() {
+        return new GenreDto(GENRE_ID, GENRE_NAME);
+    }
+
+    private AuthorDto getAuthor() {
+        return new AuthorDto(AUTHOR_ID, AUTHOR_NAME);
     }
 }

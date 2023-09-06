@@ -21,12 +21,6 @@ public class GenreDaoJdbc implements GenreDao {
     JdbcOperations jdbcOperations;
 
     @Override
-    public Genre findById(Long id) {
-        return jdbcOperations.queryForObject("SELECT id, name FROM genres WHERE id = ?", new Object[]{id},
-                                             new GenreRowMapper());
-    }
-
-    @Override
     public List<Genre> findAll() {
         String sql = "SELECT id, name FROM genres";
         return jdbcOperations.query(sql, new GenreDaoJdbc.GenreRowMapper());
