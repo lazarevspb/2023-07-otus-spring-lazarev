@@ -3,15 +3,19 @@ package ru.lazarev.springcourse.dao.impl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.EmptyResultDataAccessException;
 import ru.lazarev.springcourse.domain.Book;
+import ru.lazarev.springcourse.dto.AuthorDto;
+import ru.lazarev.springcourse.dto.BookDto;
+import ru.lazarev.springcourse.dto.GenreDto;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
-@JdbcTest
+@DataJpaTest
 @Import(BookDaoJdbc.class)
 class BookDaoJdbcTest {
 
@@ -20,6 +24,9 @@ class BookDaoJdbcTest {
     public static final String EXPECTED_BOOK_TITLE = "Book 1";
 
     public static final int EXPECTED_SIZE = 3;
+    public static final String AUTHOR_NAME = "Author 2";
+    public static final String AUTHOR_NAME_2 = "Author 1";
+    public static final String GENRE_NAME = "Genre 2";
 
     @Autowired
     private BookDaoJdbc dao;
@@ -53,7 +60,7 @@ class BookDaoJdbcTest {
 
         dao.update(bookForUpdate);
 
-        assertEquals(bookForUpdate, dao.findById(2L));
+        assertEquals(getExpectedSavedBook(), dao.findById(2L));
     }
 
     @Test
@@ -67,12 +74,21 @@ class BookDaoJdbcTest {
             .isInstanceOf(EmptyResultDataAccessException.class);
     }
 
-    private Book getExpectedBook() {
-        var expected = new Book();
+    private BookDto getExpectedBook() {
+        var expected = new BookDto();
         expected.setTitle(EXPECTED_BOOK_TITLE);
         expected.setId(1L);
-        expected.setAuthorId(1L);
-        expected.setGenreId(2L);
+        expected.setAuthor(new AuthorDto(1L, AUTHOR_NAME_2));
+        expected.setGenre(new GenreDto(2L, GENRE_NAME));
+        return expected;
+    }
+
+    private BookDto getExpectedSavedBook() {
+        var expected = new BookDto();
+        expected.setTitle(SAVED_BOOK_TITLE);
+        expected.setId(2L);
+        expected.setAuthor(new AuthorDto(2L, AUTHOR_NAME));
+        expected.setGenre(new GenreDto(2L, GENRE_NAME));
         return expected;
     }
 

@@ -17,28 +17,12 @@ class AuthorDaoJdbcTest {
 
     public static final int EXPECTED_SIZE = 2;
 
-    public static final String AUTHOR_NAME = "Author 1";
-
     @Autowired
     AuthorDaoJdbc dao;
-
-    @Test
-    void findById() {
-        var result = dao.findById(1L);
-
-        assertEquals(getExpectedAuthor(), result);
-    }
 
     @Test
     void findAll() {
         var result = dao.findAll();
         assertEquals(EXPECTED_SIZE, result.size());
-    }
-
-    private Author getExpectedAuthor() {
-        var expected = new Author();
-        expected.setName(AUTHOR_NAME);
-        expected.setId(1L);
-        return expected;
     }
 }

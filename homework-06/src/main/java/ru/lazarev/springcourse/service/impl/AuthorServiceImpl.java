@@ -26,9 +26,4 @@ public class AuthorServiceImpl implements AuthorService {
             .map(mapper::map)
             .toList();
     }
-
-    @Override
-    public AuthorDto findAuthorById(Long id) {
-        return mapper.map(dao.findById(id));
-    }
 }
