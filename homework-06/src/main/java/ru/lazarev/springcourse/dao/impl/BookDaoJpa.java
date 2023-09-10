@@ -57,8 +57,5 @@ public class BookDaoJpa implements BookDao {
 
         queryDeleteBook.setParameter("id", id);
         queryDeleteBook.executeUpdate();
-
-
     }
-
 }

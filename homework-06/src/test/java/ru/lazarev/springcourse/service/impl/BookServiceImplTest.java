@@ -14,7 +14,6 @@ import ru.lazarev.springcourse.domain.Book;
 import ru.lazarev.springcourse.domain.Genre;
 import ru.lazarev.springcourse.dto.BookDto;
 import ru.lazarev.springcourse.mapper.AuthorMapperImpl;
-import ru.lazarev.springcourse.mapper.BookMapperImpl;
 import ru.lazarev.springcourse.mapper.GenreMapperImpl;
 import ru.lazarev.springcourse.service.AuthorService;
 import ru.lazarev.springcourse.service.BookService;
@@ -30,8 +29,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith({SpringExtension.class})
-@ContextConfiguration(classes = {BookServiceImpl.class, BookMapperImpl.class, AuthorMapperImpl.class,
-    GenreMapperImpl.class})
+@ContextConfiguration(classes = {BookServiceImpl.class, AuthorMapperImpl.class, GenreMapperImpl.class})
 @FieldDefaults(level = AccessLevel.PRIVATE)
 class BookServiceImplTest {
 
