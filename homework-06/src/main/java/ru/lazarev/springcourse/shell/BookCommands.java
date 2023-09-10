@@ -26,7 +26,7 @@ public class BookCommands {
     @ShellMethod(value = "get all books", key = {"--list", "-l"})
     public String getAllBooks() {
         return bookService.findAllBooks().stream()
-            .map(BookDto::toString).collect(Collectors.joining(",", "[", "]"));
+            .map(Book::toString).collect(Collectors.joining(",", "[", "]"));
     }
 
     @ShellMethod(value = "get book by id", key = {"--get", "-g"})
@@ -41,14 +41,13 @@ public class BookCommands {
 
     @ShellMethod(value = "add book", key = {"--add", "-a"})
     public void addBook(@ShellOption String jsonBook) throws JsonProcessingException {
-        var book = mapper.readValue(jsonBook, Book.class);
-        book.setId(null);
+        var book = mapper.readValue(jsonBook, BookDto.class);
         bookService.saveBook(book);
     }
 
     @ShellMethod(value = "add book", key = {"--update", "-u"})
     public void updateBook(@ShellOption String jsonBook) throws JsonProcessingException {
-        var newBook = mapper.readValue(jsonBook, Book.class);
+        var newBook = mapper.readValue(jsonBook, BookDto.class);
         bookService.updateBook(newBook);
     }
 }

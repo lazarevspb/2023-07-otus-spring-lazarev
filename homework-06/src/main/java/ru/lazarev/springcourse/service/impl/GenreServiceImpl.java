@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import ru.lazarev.springcourse.dao.GenreDao;
+import ru.lazarev.springcourse.domain.Genre;
 import ru.lazarev.springcourse.dto.GenreDto;
 import ru.lazarev.springcourse.mapper.GenreMapper;
 import ru.lazarev.springcourse.service.GenreService;
@@ -26,5 +27,10 @@ public class GenreServiceImpl implements GenreService {
             .stream()
             .map(mapper::map)
             .toList();
+    }
+
+    @Override
+    public Genre findGenreById(Long id) {
+        return dao.findById(id).orElseThrow(RuntimeException::new);
     }
 }

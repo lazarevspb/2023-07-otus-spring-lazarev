@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface BookService {
 
-    List<BookDto> findAllBooks();
+    List<Book> findAllBooks();
 
-    BookDto findBookById(Long id);
+    Book findBookById(Long id);
 
-    void saveBook(Book book);
+    void saveBook(BookDto book);
 
-    void updateBook(Book book);
+    void updateBook(BookDto book);
 
     void deleteBookById(Long id);
 }

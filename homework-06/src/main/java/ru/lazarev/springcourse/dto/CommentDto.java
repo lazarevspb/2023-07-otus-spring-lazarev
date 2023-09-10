@@ -16,13 +16,10 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class BookDto {
+public class CommentDto {
+    private Long id;
 
-    Long id;
+    private String text;
 
-    String title;
-
-    Long authorId;
-
-    Long genreId;
+    private Long bookId;
 }

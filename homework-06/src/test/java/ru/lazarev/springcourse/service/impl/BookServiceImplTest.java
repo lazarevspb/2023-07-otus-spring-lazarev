@@ -9,12 +9,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.lazarev.springcourse.dao.BookDao;
+import ru.lazarev.springcourse.domain.Author;
 import ru.lazarev.springcourse.domain.Book;
-import ru.lazarev.springcourse.dto.AuthorDto;
+import ru.lazarev.springcourse.domain.Genre;
 import ru.lazarev.springcourse.dto.BookDto;
-import ru.lazarev.springcourse.dto.GenreDto;
 import ru.lazarev.springcourse.mapper.AuthorMapperImpl;
-import ru.lazarev.springcourse.mapper.BookMapper;
 import ru.lazarev.springcourse.mapper.BookMapperImpl;
 import ru.lazarev.springcourse.mapper.GenreMapperImpl;
 import ru.lazarev.springcourse.service.AuthorService;
@@ -24,6 +23,7 @@ import ru.lazarev.springcourse.service.GenreService;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -58,23 +58,28 @@ class BookServiceImplTest {
 
 
     @Autowired
-    BookMapper mapper;
-
-    @Autowired
     BookService service;
 
     @Test
     void saveBook() {
-        service.saveBook(getBook());
+        when(authorService.findAuthorById(any())).thenReturn(getAuthor());
+        when(genreService.findGenreById(any())).thenReturn(getGenre());
 
-        verify(bookDao, times(1)).save(eq(getBook()));
+        service.saveBook(getBookDto());
+
+        var savedBook = getBook();
+        savedBook.setId(null);
+        verify(bookDao, times(1)).save(eq((savedBook)));
     }
 
     @Test
     void updateBook() {
-        service.updateBook(getBook());
+        when(authorService.findAuthorById(any())).thenReturn(getAuthor());
+        when(genreService.findGenreById(any())).thenReturn(getGenre());
 
-        verify(bookDao, times(1)).update(eq(getBook()));
+        service.updateBook(getBookDto());
+
+        verify(bookDao, times(1)).save(eq(getBook()));
     }
 
     @Test
@@ -90,40 +95,37 @@ class BookServiceImplTest {
 
         var actual = service.findAllBooks();
 
-        assertEquals(getBookDtoList(), actual);
+        assertEquals(getBookList(), actual);
     }
 
     @Test
     void findBookById() {
-        when(bookDao.findById(eq(AUTHOR_ID))).thenReturn(getBookDto());
+        when(bookDao.findById(eq(AUTHOR_ID))).thenReturn(getBook());
 
         var actual = service.findBookById(AUTHOR_ID);
 
-        assertEquals(getBookDto(), actual);
+        assertEquals(getBook(), actual);
     }
 
-    private List<BookDto> getBookList() {
-        return List.of(getBookDto());
+    private List<Book> getBookList() {
+        return List.of(getBook());
     }
 
     private Book getBook() {
-        return new Book(Book_ID, Book_NAME, AUTHOR_ID, GENRE_ID);
+        return new Book(Book_ID, Book_NAME, getAuthor(), getGenre());
     }
 
-    private List<BookDto> getBookDtoList() {
-        return List.of(getBookDto());
-    }
+
 
     private BookDto getBookDto() {
-        return new BookDto(Book_ID, Book_NAME, getAuthor(),
-                           getGenre());
+        return new BookDto(Book_ID, Book_NAME, AUTHOR_ID, GENRE_ID);
     }
 
-    private GenreDto getGenre() {
-        return new GenreDto(GENRE_ID, GENRE_NAME);
+    private Genre getGenre() {
+        return new Genre(GENRE_ID, GENRE_NAME);
     }
 
-    private AuthorDto getAuthor() {
-        return new AuthorDto(AUTHOR_ID, AUTHOR_NAME);
+    private Author getAuthor() {
+        return new Author(AUTHOR_ID, AUTHOR_NAME);
     }
 }
