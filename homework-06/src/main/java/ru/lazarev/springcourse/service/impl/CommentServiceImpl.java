@@ -10,19 +10,12 @@ import ru.lazarev.springcourse.domain.Comment;
 import ru.lazarev.springcourse.dto.CommentDto;
 import ru.lazarev.springcourse.service.CommentService;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CommentServiceImpl implements CommentService {
 
     CommentDao commentDao;
-
-    @Override
-    public List<Comment> findAllCommentsByBookId(Long id) {
-        return commentDao.findAllCommentByBookId(id);
-    }
 
     @Override
     public Comment findCommentById(Long id) {

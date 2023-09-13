@@ -8,11 +8,8 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
-import ru.lazarev.springcourse.domain.Book;
 import ru.lazarev.springcourse.dto.BookDto;
 import ru.lazarev.springcourse.service.BookService;
-
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @ShellComponent
@@ -25,8 +22,7 @@ public class BookCommands {
 
     @ShellMethod(value = "get all books", key = {"--list", "-l"})
     public String getAllBooks() {
-        return bookService.findAllBooks().stream()
-            .map(Book::toString).collect(Collectors.joining(",", "[", "]"));
+        return bookService.findAllBooks();
     }
 
     @ShellMethod(value = "get book by id", key = {"--get", "-g"})

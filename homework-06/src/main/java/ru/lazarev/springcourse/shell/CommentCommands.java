@@ -2,6 +2,7 @@ package ru.lazarev.springcourse.shell;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -10,6 +11,7 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.lazarev.springcourse.domain.Comment;
 import ru.lazarev.springcourse.dto.CommentDto;
+import ru.lazarev.springcourse.service.BookService;
 import ru.lazarev.springcourse.service.CommentService;
 
 import java.util.stream.Collectors;
@@ -21,16 +23,16 @@ public class CommentCommands {
 
     ObjectMapper mapper;
     CommentService commentService;
+    BookService bookService;
 
     @ShellMethod(value = "", key = {"--comments"})
     public String getAllCommentsByBookId(@ShellOption Long id) {
-        return commentService.findAllCommentsByBookId(id).stream()
-            .map(Comment::toString)
+        return bookService.findAllCommentByBookId(id).stream().map(Comment::toString)
             .collect(Collectors.joining(",", "[", "]"));
     }
 
     @ShellMethod(value = "", key = {"--comment"})
-    public String getAllCommentsById(@ShellOption Long id) {
+    public String getCommentsById(@ShellOption Long id) {
         return commentService.findCommentById(id).toString();
     }
 

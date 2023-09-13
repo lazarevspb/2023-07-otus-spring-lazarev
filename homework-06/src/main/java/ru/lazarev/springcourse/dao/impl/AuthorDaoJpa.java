@@ -29,8 +29,6 @@ public class AuthorDaoJpa implements AuthorDao {
 
     @Override
     public Optional<Author> findById(Long id) {
-        TypedQuery<Author> query = entityManager.createQuery("select a from Author a where a.id = :id", Author.class);
-        query.setParameter("id", id);
-        return Optional.of(query.getSingleResult());
+        return Optional.of(entityManager.find(Author.class, id));
     }
 }

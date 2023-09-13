@@ -1,27 +1,42 @@
-CREATE SEQUENCE COMMENTS_SEQ START WITH 1 INCREMENT BY 1;
-
-DROP TABLE IF EXISTS books;
-DROP TABLE IF EXISTS authors;
-DROP TABLE IF EXISTS genres;
+DROP TABLE IF EXISTS authors CASCADE;
+DROP TABLE IF EXISTS books CASCADE;
+DROP TABLE IF EXISTS comments CASCADE;
+DROP TABLE IF EXISTS genres CASCADE;
 
 CREATE TABLE authors
 (
-    id   SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
-);
-
-CREATE TABLE genres
-(
-    id   SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
+    id   BIGSERIAL,
+    name VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE books
 (
-    id        SERIAL PRIMARY KEY,
+    author_id BIGINT       NOT NULL,
+    genre_id  BIGINT       NOT NULL,
+    id        BIGSERIAL,
     title     VARCHAR(255) NOT NULL,
-    author_id INT          NOT NULL,
-    genre_id  INT          NOT NULL,
-    FOREIGN KEY (author_id) REFERENCES authors (id),
-    FOREIGN KEY (genre_id) REFERENCES genres (id)
+    PRIMARY KEY (id)
 );
+
+CREATE TABLE comments
+(
+    book_id BIGINT,
+    id      BIGSERIAL,
+    text    VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE genres
+(
+    id   BIGSERIAL,
+    name VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+ALTER TABLE IF EXISTS books
+    ADD CONSTRAINT fk_authors FOREIGN KEY (author_id) REFERENCES authors;
+ALTER TABLE IF EXISTS books
+    ADD CONSTRAINT fk_genres FOREIGN KEY (genre_id) REFERENCES genres;
+ALTER TABLE IF EXISTS comments
+    ADD CONSTRAINT fk_books FOREIGN KEY (book_id) REFERENCES books;

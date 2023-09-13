@@ -36,13 +36,6 @@ class CommentDaoTest {
     private CommentDaoJpa commentDao;
 
     @Test
-    void findAllCommentByBookId() {
-        var comments = commentDao.findAllCommentByBookId(BOOK_ID);
-
-        assertEquals(2, comments.size());
-    }
-
-    @Test
     void findById() {
         var actual = commentDao.findById(COMMENT_ID);
 

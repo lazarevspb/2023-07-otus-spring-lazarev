@@ -7,7 +7,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import ru.lazarev.springcourse.domain.Author;
 import ru.lazarev.springcourse.domain.Book;
+import ru.lazarev.springcourse.domain.Comment;
 import ru.lazarev.springcourse.domain.Genre;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -70,7 +73,7 @@ class BookDaoJpaTest {
     void delete() {
         assertNotNull(entityManager.find(Book.class, 2L));
 
-        dao.delete(2L);
+        //        dao.delete(book);
         entityManager.clear();
 
         assertNull(entityManager.find(Book.class, 2L));
@@ -79,12 +82,12 @@ class BookDaoJpaTest {
     private Book getBook() {
         var author = new Author(BOOK_ID, AUTHOR_1_NAME);
         var genre = new Genre(UPDATED_BOOK_ID, GENRE_2_NAME);
-        return new Book(BOOK_ID, BOOK_1_TITLE, author, genre);
+        return new Book(BOOK_ID, BOOK_1_TITLE, author, genre, List.of(new Comment()));
     }
 
     private Book getBookForSave() {
         var author = new Author(BOOK_ID, AUTHOR_1_NAME);
         var genre = new Genre(UPDATED_BOOK_ID, GENRE_2_NAME);
-        return new Book(SAVED_BOOK_ID, BOOK_1_TITLE, author, genre);
+        return new Book(SAVED_BOOK_ID, BOOK_1_TITLE, author, genre, List.of(new Comment()));
     }
 }

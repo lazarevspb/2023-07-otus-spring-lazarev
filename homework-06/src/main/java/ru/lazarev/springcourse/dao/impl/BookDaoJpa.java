@@ -2,7 +2,6 @@ package ru.lazarev.springcourse.dao.impl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -23,19 +22,13 @@ public class BookDaoJpa implements BookDao {
 
     @Override
     public List<Book> findAll() {
-        TypedQuery<Book> query = entityManager.createQuery(
-            "SELECT DISTINCT b FROM Book b JOIN FETCH b.author JOIN FETCH b.genre ORDER BY b.id",
-            Book.class);
+        TypedQuery<Book> query = entityManager.createQuery("SELECT DISTINCT b FROM Book b", Book.class);
         return query.getResultList();
     }
 
     @Override
     public Book findById(Long id) {
-        String jpql =
-            "SELECT b FROM Book b JOIN FETCH b.author JOIN FETCH b.genre g WHERE b.id = :id";
-        TypedQuery<Book> query = entityManager.createQuery(jpql, Book.class);
-        query.setParameter("id", id);
-        return query.getSingleResult();
+        return entityManager.find(Book.class, id);
     }
 
     @Override
@@ -48,14 +41,7 @@ public class BookDaoJpa implements BookDao {
     }
 
     @Override
-    public void delete(Long id) {
-        Query queryDeleteComment = entityManager.createQuery("delete from Comment c where c.book.id = :id");
-        Query queryDeleteBook = entityManager.createQuery("delete from Book b where b.id = :id");
-
-        queryDeleteComment.setParameter("id", id);
-        queryDeleteComment.executeUpdate();
-
-        queryDeleteBook.setParameter("id", id);
-        queryDeleteBook.executeUpdate();
+    public void delete(Book book) {
+        entityManager.remove(book);
     }
 }
