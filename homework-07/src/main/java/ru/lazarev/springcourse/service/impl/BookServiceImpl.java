@@ -35,7 +35,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Transactional
     public List<Comment> findAllCommentByBookId(Long id) {
         return repository.findById(id).get().getComments().stream()
             .toList();
@@ -47,7 +46,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Transactional
     public void saveBook(BookDto book) {
         repository.save(new Book(null, book.getTitle(), authorService.findAuthorById(book.getAuthorId()),
                                  genreService.findGenreById(book.getGenreId()), List.of(new Comment())));
@@ -55,14 +53,12 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Transactional
     public void updateBook(BookDto book) {
         repository.save(new Book(book.getId(), book.getTitle(), authorService.findAuthorById(book.getAuthorId()),
                                  genreService.findGenreById(book.getGenreId()), List.of(new Comment())));
     }
 
     @Override
-    @Transactional
     public void deleteBookById(Long id) {
         repository.findById(id)
             .ifPresent(repository::delete);

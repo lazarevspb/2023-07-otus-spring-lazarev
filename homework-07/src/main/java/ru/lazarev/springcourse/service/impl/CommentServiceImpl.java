@@ -27,7 +27,6 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Transactional
     public void saveComment(CommentDto commentDto) {
         commentDto.setId(null);
         var book = bookService.findBookById(commentDto.getBookId());
@@ -35,14 +34,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Transactional
     public void updateComment(CommentDto commentDto) {
         var book = bookService.findBookById(commentDto.getBookId());
         repository.save(commentMapper.map(commentDto, book));
     }
 
     @Override
-    @Transactional
     public void deleteCommentById(Long id) {
         repository.deleteById(id);
     }
