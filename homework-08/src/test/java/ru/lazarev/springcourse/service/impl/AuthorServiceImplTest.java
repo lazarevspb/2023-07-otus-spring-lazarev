@@ -27,7 +27,8 @@ class AuthorServiceImplTest {
 
     public static final String AUTHOR_NAME = "Author_name";
 
-    public static final long AUTHOR_ID = 1L;
+    private static final String AUTHOR_1_ID = "6517f6fcfaa2217f18e0c6a0";
+
 
     @MockBean
     AuthorRepository repository;
@@ -52,7 +53,7 @@ class AuthorServiceImplTest {
     }
 
     private Author getAuthor() {
-        return new Author(AUTHOR_ID, AUTHOR_NAME);
+        return new Author(AUTHOR_1_ID, AUTHOR_NAME);
     }
 
     private List<AuthorDto> getAuthorDtoList() {
@@ -60,6 +61,6 @@ class AuthorServiceImplTest {
     }
 
     private AuthorDto getAuthorDto() {
-        return new AuthorDto(AUTHOR_ID, AUTHOR_NAME);
+        return new AuthorDto(AUTHOR_1_ID, AUTHOR_NAME);
     }
 }

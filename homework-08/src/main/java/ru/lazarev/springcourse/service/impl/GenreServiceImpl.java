@@ -30,7 +30,7 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public Genre findGenreById(Long id) {
+    public Genre findGenreById(String id) {
         return repository.findById(id).orElseThrow(RuntimeException::new);
     }
 }

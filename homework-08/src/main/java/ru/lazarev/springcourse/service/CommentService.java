@@ -5,11 +5,11 @@ import ru.lazarev.springcourse.dto.CommentDto;
 
 public interface CommentService {
 
-    Comment findCommentById(Long id);
+    Comment findCommentById(String id);
 
     void saveComment(CommentDto comment);
 
     void updateComment(CommentDto comment);
 
-    void deleteCommentById(Long id);
+    void deleteCommentById(String id);
 }

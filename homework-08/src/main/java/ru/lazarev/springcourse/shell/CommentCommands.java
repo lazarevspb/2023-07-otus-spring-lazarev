@@ -2,7 +2,6 @@ package ru.lazarev.springcourse.shell;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -26,13 +25,13 @@ public class CommentCommands {
     BookService bookService;
 
     @ShellMethod(value = "", key = {"--comments"})
-    public String getAllCommentsByBookId(@ShellOption Long id) {
+    public String getAllCommentsByBookId(@ShellOption String id) {
         return bookService.findAllCommentByBookId(id).stream().map(Comment::toString)
             .collect(Collectors.joining(",", "[", "]"));
     }
 
     @ShellMethod(value = "", key = {"--comment"})
-    public String getCommentsById(@ShellOption Long id) {
+    public String getCommentsById(@ShellOption String id) {
         return commentService.findCommentById(id).toString();
     }
 
@@ -49,7 +48,7 @@ public class CommentCommands {
     }
 
     @ShellMethod(value = "add book", key = {"--delComment"})
-    public void deleteComment(@ShellOption Long id) {
+    public void deleteComment(@ShellOption String id) {
         commentService.deleteCommentById(id);
     }
 }

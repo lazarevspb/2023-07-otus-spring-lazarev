@@ -1,6 +1,5 @@
 package ru.lazarev.springcourse.service.impl;
 
-import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -22,7 +21,7 @@ public class CommentServiceImpl implements CommentService {
     CommentMapper commentMapper;
 
     @Override
-    public Comment findCommentById(Long id) {
+    public Comment findCommentById(String id) {
         return repository.findById(id).get();
     }
 
@@ -40,7 +39,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void deleteCommentById(Long id) {
+    public void deleteCommentById(String id) {
         repository.deleteById(id);
     }
 }

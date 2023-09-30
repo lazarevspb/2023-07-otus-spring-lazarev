@@ -37,13 +37,13 @@ class BookServiceImplTest {
 
     public static final String Book_NAME = "Book_name";
 
-    public static final long Book_ID = 1L;
+    public static final String Book_ID = "1";
 
-    public static final long AUTHOR_ID = 1L;
+    public static final String AUTHOR_ID = "1";
 
     public static final String AUTHOR_NAME = "Author_name";
 
-    public static final long GENRE_ID = 2L;
+    public static final String GENRE_ID = "2";
 
     public static final String GENRE_NAME = "Genre_name";
     public static final String EXPECTED_LIST_STRING = "[Book(id=1, title=Book_name, author=Author(id=1, name=Author_name), genre=Genre(id=2, name=Genre_name), comments=[Comment(id=null, text=null)])]";

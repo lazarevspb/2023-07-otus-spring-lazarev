@@ -1,10 +1,10 @@
 package ru.lazarev.springcourse.service.impl;
 
-import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.lazarev.springcourse.repository.BookRepository;
 import ru.lazarev.springcourse.domain.Book;
 import ru.lazarev.springcourse.domain.Comment;
@@ -35,13 +35,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Comment> findAllCommentByBookId(Long id) {
+    public List<Comment> findAllCommentByBookId(String id) {
         return repository.findById(id).get().getComments().stream()
             .toList();
     }
 
     @Override
-    public Book findBookById(Long id) {
+    public Book findBookById(String id) {
         return repository.findById(id).get();
     }
 
@@ -59,7 +59,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void deleteBookById(Long id) {
+    public void deleteBookById(String id) {
         repository.findById(id)
             .ifPresent(repository::delete);
     }

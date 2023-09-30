@@ -26,12 +26,12 @@ public class BookCommands {
     }
 
     @ShellMethod(value = "get book by id", key = {"--get", "-g"})
-    public String getBookById(@ShellOption Long id) {
+    public String getBookById(@ShellOption String id) {
         return bookService.findBookById(id).toString();
     }
 
     @ShellMethod(value = "get book by id", key = {"--delete", "-d"})
-    public void deleteBookById(@ShellOption Long id) {
+    public void deleteBookById(@ShellOption String id) {
         bookService.deleteBookById(id);
     }
 

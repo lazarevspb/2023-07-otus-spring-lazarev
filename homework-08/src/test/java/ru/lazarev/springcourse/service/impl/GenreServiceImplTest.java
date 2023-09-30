@@ -27,7 +27,7 @@ class GenreServiceImplTest {
 
     public static final String Genre_NAME = "Genre_name";
 
-    public static final long Genre_ID = 1L;
+    public static final String Genre_ID = "1";
 
     @MockBean
     GenreRepository repository;

@@ -12,11 +12,11 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookDto {
 
-    Long id;
+    String id;
 
     String title;
 
-    Long authorId;
+    String authorId;
 
-    Long genreId;
+    String genreId;
 }

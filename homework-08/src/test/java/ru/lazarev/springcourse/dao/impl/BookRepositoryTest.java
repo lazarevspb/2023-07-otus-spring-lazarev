@@ -2,8 +2,8 @@ package ru.lazarev.springcourse.dao.impl;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.test.annotation.DirtiesContext;
 import ru.lazarev.springcourse.domain.Author;
 import ru.lazarev.springcourse.domain.Book;
 import ru.lazarev.springcourse.domain.Comment;
@@ -13,25 +13,26 @@ import ru.lazarev.springcourse.repository.BookRepository;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
-@DataJpaTest
+@DataMongoTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class BookRepositoryTest {
 
-    public static final int EXPECTED_SIZE = 3;
+    public static final int EXPECTED_SIZE = 2;
     public static final String AUTHOR_1_NAME = "Author 1";
     public static final String GENRE_2_NAME = "Genre 2";
     public static final String BOOK_1_TITLE = "Book 1";
-    public static final long BOOK_ID = 1L;
-    public static final long UPDATED_BOOK_ID = 2L;
-    public static final long SAVED_BOOK_ID = 3L;
+    public static final String UPDATED_BOOK_ID = "2";
+    public static final String SAVED_BOOK_ID = "3";
+    public static final String BOOK_ID = "6517f6fcfaa2217f18e0c6b0";
+    private static final String GENRE_2_ID = "6517f6fcfaa2217f18e0c6g1";
+    public static final String COMMENT_1_ID = "6517f6fcfaa2217f18e0c6c0";
+    private static final String AUTHOR_1_ID = "6517f6fcfaa2217f18e0c6a0";
 
     @Autowired
     private BookRepository repository;
 
-    @Autowired
-    private TestEntityManager entityManager;
 
     @Test
     void findById() {
@@ -50,11 +51,11 @@ class BookRepositoryTest {
     void save() {
         var bookForSave = getBookForSave();
 
-        repository.save(bookForSave);
+        var saved = repository.save(bookForSave);
 
-        var actual = entityManager.find(Book.class, SAVED_BOOK_ID);
+        var actual = repository.findById(saved.getId());
 
-        assertEquals(bookForSave, actual);
+        assertEquals(bookForSave, actual.get());
     }
 
     @Test
@@ -62,37 +63,34 @@ class BookRepositoryTest {
         var bookForUpdate = getBook();
         bookForUpdate.setId(UPDATED_BOOK_ID);
 
-        repository.save(bookForUpdate);
+        var actual = repository.save(bookForUpdate);
 
-        var actual = entityManager.find(Book.class, UPDATED_BOOK_ID);
         assertEquals(bookForUpdate, actual);
     }
 
     @Test
     void delete() {
-        assertNotNull(entityManager.find(Book.class, 2L));
+        repository.deleteById(BOOK_ID);
 
-        repository.deleteById(2L);
+        var book = repository.findById(BOOK_ID);
 
-        assertNull(entityManager.find(Book.class, 2L));
+        assertFalse(book.isPresent());
     }
 
     private Book getBook() {
-        var author = new Author(BOOK_ID, AUTHOR_1_NAME);
-        var genre = new Genre(UPDATED_BOOK_ID, GENRE_2_NAME);
+        var author = new Author(AUTHOR_1_ID, AUTHOR_1_NAME);
+        var genre = new Genre(GENRE_2_ID, GENRE_2_NAME);
         return new Book(BOOK_ID, BOOK_1_TITLE, author, genre, getCommentList());
     }
 
     private List<Comment> getCommentList() {
-        var comment0 = new Comment(1L, "comment 1 book 1", null);
-        var comment1 = new Comment(2L, "comment 2 book 1", null);
-        var comment2 = new Comment(3L, "comment 3 book 1", null);
-        return List.of(comment0, comment1, comment2);
+        var comment0 = new Comment(COMMENT_1_ID, "comment 1 book 1", null);
+        return List.of(comment0);
     }
 
     private Book getBookForSave() {
-        var author = new Author(BOOK_ID, AUTHOR_1_NAME);
-        var genre = new Genre(UPDATED_BOOK_ID, GENRE_2_NAME);
+        var author = new Author(AUTHOR_1_ID, AUTHOR_1_NAME);
+        var genre = new Genre(GENRE_2_ID, GENRE_2_NAME);
         return new Book(SAVED_BOOK_ID, BOOK_1_TITLE, author, genre, null);
     }
 }

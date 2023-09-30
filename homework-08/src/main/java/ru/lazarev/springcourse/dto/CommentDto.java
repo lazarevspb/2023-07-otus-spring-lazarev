@@ -11,9 +11,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CommentDto {
-    private Long id;
-
-    private String text;
-
-    private Long bookId;
+    String id;
+    String text;
+    String bookId;
 }

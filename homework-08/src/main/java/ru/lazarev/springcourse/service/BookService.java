@@ -10,13 +10,13 @@ public interface BookService {
 
     String findAllBooks();
 
-    List<Comment> findAllCommentByBookId(Long id);
+    List<Comment> findAllCommentByBookId(String id);
 
-    Book findBookById(Long id);
+    Book findBookById(String id);
 
     void saveBook(BookDto book);
 
     void updateBook(BookDto book);
 
-    void deleteBookById(Long id);
+    void deleteBookById(String id);
 }
