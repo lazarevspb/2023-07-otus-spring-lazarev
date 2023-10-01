@@ -48,7 +48,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public void saveBook(BookDto book) {
         repository.save(new Book(null, book.getTitle(), authorService.findAuthorById(book.getAuthorId()),
-                                 genreService.findGenreById(book.getGenreId()), List.of(new Comment())));
+                                 genreService.findGenreById(book.getGenreId()), null));
 
     }
 
