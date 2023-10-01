@@ -10,4 +10,6 @@ public interface AuthorService {
     List<AuthorDto> getAllAuthor();
 
     Author findAuthorById(Long id);
+
+    Author findByName(String name);
 }

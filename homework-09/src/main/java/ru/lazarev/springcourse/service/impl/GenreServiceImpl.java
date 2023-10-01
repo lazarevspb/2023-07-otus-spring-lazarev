@@ -33,4 +33,9 @@ public class GenreServiceImpl implements GenreService {
     public Genre findGenreById(Long id) {
         return repository.findById(id).orElseThrow(RuntimeException::new);
     }
+
+    @Override
+    public Genre findByName(String name) {
+        return repository.findByName(name).orElseThrow(RuntimeException::new);
+    }
 }

@@ -4,10 +4,10 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
-import ru.lazarev.springcourse.repository.AuthorRepository;
 import ru.lazarev.springcourse.domain.Author;
 import ru.lazarev.springcourse.dto.AuthorDto;
 import ru.lazarev.springcourse.mapper.AuthorMapper;
+import ru.lazarev.springcourse.repository.AuthorRepository;
 import ru.lazarev.springcourse.service.AuthorService;
 
 import java.util.List;
@@ -31,5 +31,10 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public Author findAuthorById(Long id) {
         return repository.findById(id).orElseThrow(RuntimeException::new);
+    }
+
+    @Override
+    public Author findByName(String name) {
+        return repository.findByName(name).orElseThrow(RuntimeException::new);
     }
 }

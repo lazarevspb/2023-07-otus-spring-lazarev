@@ -20,6 +20,7 @@ import ru.lazarev.springcourse.service.AuthorService;
 import ru.lazarev.springcourse.service.BookService;
 import ru.lazarev.springcourse.service.GenreService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,14 +40,19 @@ class BookServiceImplTest {
 
     public static final long Book_ID = 1L;
 
-    public static final long AUTHOR_ID = 1L;
+    public static final String AUTHOR_1 = "Author 1";
+
+    public static final String GENRE_2 = "Genre 2";
 
     public static final String AUTHOR_NAME = "Author_name";
 
-    public static final long GENRE_ID = 2L;
-
     public static final String GENRE_NAME = "Genre_name";
-    public static final String EXPECTED_LIST_STRING = "[Book(id=1, title=Book_name, author=Author(id=1, name=Author_name), genre=Genre(id=2, name=Genre_name), comments=[Comment(id=null, text=null)])]";
+
+    public static final String EXPECTED_LIST_STRING = "[Book(id=1, title=Book_name, author=Author(id=1, "
+        + "name=Author_name), genre=Genre(id=2, name=Genre_name), comments=[Comment(id=null, text=null)])]";
+    public static final Long GENRE_ID = 2L;
+
+    public static final Long AUTHOR_ID = 1L;
 
     @MockBean
     BookRepository repository;
@@ -63,10 +69,14 @@ class BookServiceImplTest {
 
     @Test
     void saveBook() {
-        when(authorService.findAuthorById(any())).thenReturn(getAuthor());
-        when(genreService.findGenreById(any())).thenReturn(getGenre());
+        when(authorService.findByName(any())).thenReturn(getAuthor());
+        when(genreService.findByName(any())).thenReturn(getGenre());
+        when(repository.findById(any())).thenReturn(Optional.of(getBook()));
 
-        service.saveBook(getBookDto());
+        var bookDto = getBookDto();
+        bookDto.setId(null);
+
+        service.saveBook(bookDto);
 
         var savedBook = getBook();
         savedBook.setId(null);
@@ -75,12 +85,14 @@ class BookServiceImplTest {
 
     @Test
     void updateBook() {
-        when(authorService.findAuthorById(any())).thenReturn(getAuthor());
-        when(genreService.findGenreById(any())).thenReturn(getGenre());
+        when(authorService.findByName(any())).thenReturn(getAuthor());
+        when(genreService.findByName(any())).thenReturn(getGenre());
+        when(repository.findById(any())).thenReturn(Optional.of(getBook()));
 
         service.updateBook(getBookDto());
 
         verify(repository, times(1)).save(eq(getBook()));
+        verify(repository, times(1)).findById(1L);
     }
 
     @Test
@@ -96,20 +108,26 @@ class BookServiceImplTest {
 
         var actual = service.findAllBooks();
 
-        assertEquals(getBookListString(), actual);
+        assertEquals(getBookList(), actual);
     }
 
     @Test
     void findBookById() {
-        when(repository.findById(eq(AUTHOR_ID))).thenReturn(Optional.of(getBook()));
+        when(repository.findById(eq(Book_ID))).thenReturn(Optional.of(getBook()));
 
-        var actual = service.findBookById(AUTHOR_ID);
+        var actual = service.findBookById(Book_ID);
 
         assertEquals(getBook(), actual);
     }
 
     private List<Book> getBookList() {
-        return List.of(getBook());
+        var book1 = getBook();
+        book1.setId(2L);
+        var book0 = getBook();
+        List<Book> listBooks = new ArrayList<>();
+        listBooks.add(book0);
+        listBooks.add(book1);
+        return listBooks;
     }
 
     private Book getBook() {
@@ -118,7 +136,7 @@ class BookServiceImplTest {
 
 
     private BookDto getBookDto() {
-        return new BookDto(Book_ID, Book_NAME, AUTHOR_ID, GENRE_ID);
+        return new BookDto(Book_ID, Book_NAME, AUTHOR_1, GENRE_2);
     }
 
     private Genre getGenre() {

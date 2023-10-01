@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+import ru.lazarev.springcourse.domain.Author;
+import ru.lazarev.springcourse.domain.Genre;
 import ru.lazarev.springcourse.repository.BookRepository;
 import ru.lazarev.springcourse.domain.Book;
 import ru.lazarev.springcourse.domain.Comment;
@@ -13,8 +15,10 @@ import ru.lazarev.springcourse.service.AuthorService;
 import ru.lazarev.springcourse.service.BookService;
 import ru.lazarev.springcourse.service.GenreService;
 
+import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,9 +33,10 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public String findAllBooks() {
-        return repository.findAll().stream()
-            .map(Book::toString).collect(Collectors.joining(",", "[", "]"));
+    public List<Book> findAllBooks() {
+        var bookList = repository.findAll();
+        bookList.sort(Comparator.comparing(Book::getId));
+        return bookList;
     }
 
     @Override
@@ -46,16 +51,34 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void saveBook(BookDto book) {
-        repository.save(new Book(null, book.getTitle(), authorService.findAuthorById(book.getAuthorId()),
-                                 genreService.findGenreById(book.getGenreId()), List.of(new Comment())));
-
+    public void saveBook(BookDto newBook) {
+        if (Objects.nonNull(newBook.getId())) {
+            var oldBook = repository.findById(newBook.getId());
+            repository.save(new Book(newBook.getId(), newBook.getTitle(), getAuthor(newBook),
+                                     getGenre(newBook),
+                                     getOldComments(oldBook)));
+        } else {
+            repository.save(new Book(null, newBook.getTitle(), getAuthor(newBook),
+                                     getGenre(newBook),
+                                     null));
+        }
     }
 
     @Override
-    public void updateBook(BookDto book) {
-        repository.save(new Book(book.getId(), book.getTitle(), authorService.findAuthorById(book.getAuthorId()),
-                                 genreService.findGenreById(book.getGenreId()), List.of(new Comment())));
+    public void updateBook(BookDto newBook) {
+        saveBook(newBook);
+    }
+
+    private Author getAuthor(BookDto newBook) {
+        return authorService.findByName(newBook.getAuthor());
+    }
+
+    private Genre getGenre(BookDto newBook) {
+        return genreService.findByName(newBook.getGenre());
+    }
+
+    private List<Comment> getOldComments(Optional<Book> oldBook) {
+        return oldBook.map(Book::getComments).orElse(null);
     }
 
     @Override
