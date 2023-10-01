@@ -10,4 +10,6 @@ public interface GenreService {
     List<GenreDto> getAllGenre();
 
     Genre findGenreById(Long id);
+
+    Genre findByName(String name);
 }

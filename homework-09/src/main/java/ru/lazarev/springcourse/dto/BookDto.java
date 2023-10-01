@@ -16,7 +16,7 @@ public class BookDto {
 
     String title;
 
-    Long authorId;
+    String author;
 
-    Long genreId;
+    String genre;
 }

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface BookService {
 
-    String findAllBooks();
+    List<Book> findAllBooks();
 
     List<Comment> findAllCommentByBookId(Long id);
 

@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS genres CASCADE;
 CREATE TABLE authors
 (
     id   BIGSERIAL,
-    name VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL UNIQUE,
     PRIMARY KEY (id)
 );
 
@@ -30,8 +30,8 @@ CREATE TABLE comments
 CREATE TABLE genres
 (
     id   BIGSERIAL,
-    name VARCHAR(255) NOT NULL,
-    PRIMARY KEY (id)
+    name VARCHAR(255) NOT NULL UNIQUE,
+        PRIMARY KEY (id)
 );
 
 ALTER TABLE IF EXISTS books
