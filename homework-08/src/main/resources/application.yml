@@ -1,0 +1,19 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: otus
+
+
+mongock:
+  runner-type: "InitializingBean"
+  change-logs-scan-package: ru.lazarev.springcourse.db.migration
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
+
+
