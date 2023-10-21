@@ -12,11 +12,9 @@ spring:
     properties:
       hibernate:
         format_sql: true
-
     show-sql: true
 properties:
   postgres:
     url: jdbc:postgresql://localhost:5432/postgres?currentSchema=otus
     username: postgres
     password: example
-

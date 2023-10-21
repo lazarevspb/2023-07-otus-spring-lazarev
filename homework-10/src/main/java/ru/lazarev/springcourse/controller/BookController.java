@@ -4,70 +4,63 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import ru.lazarev.springcourse.dto.BookDto;
 import ru.lazarev.springcourse.mapper.BookMapper;
 import ru.lazarev.springcourse.service.AuthorService;
 import ru.lazarev.springcourse.service.BookService;
 import ru.lazarev.springcourse.service.GenreService;
 
-@Controller
+import java.util.List;
+import java.util.stream.Collectors;
+
+@RestController
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/books")
+@RequestMapping("api/v1/books")
 public class BookController {
     BookService bookService;
     BookMapper bookMapper;
-    AuthorService authorService;
-    GenreService genreService;
 
     @GetMapping
-    public String getAllBooks(Model model) {
+    public ResponseEntity<List<BookDto>> getAllBooks() {
         var books = bookService.findAllBooks().stream()
-            .map(bookMapper::map);
-        model.addAttribute("books", books);
-        return "index";
+            .map(bookMapper::map).collect(Collectors.toList());
+        return ResponseEntity.ok(books);
     }
 
-    @GetMapping("/edit")
-    public String editBooks(@RequestParam("id") long id, Model model) {
-        model.addAttribute("authors", authorService.getAllAuthor());
-        model.addAttribute("genres", genreService.getAllGenre());
-        model.addAttribute("book", bookMapper.map(bookService.findBookById(id)));
-        return "edit";
-    }
-
-    @PostMapping("/edit")
-    public String updateBook(BookDto book) {
-        bookService.updateBook(book);
-        return "redirect:/books";
+    @GetMapping("{id}")
+    public ResponseEntity<BookDto> getBookById(@PathVariable Long id) {
+        return ResponseEntity.ok(bookMapper.map(bookService.findBookById(id)));
     }
 
     @DeleteMapping("/{id}")
-    public String updateBook(@PathVariable Long id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
         bookService.deleteBookById(id);
-        return "redirect:/books";
+        return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/new")
-    public String newBook(Model model) {
-        model.addAttribute("authors", authorService.getAllAuthor());
-        model.addAttribute("genres", genreService.getAllGenre());
-        model.addAttribute("book", new BookDto());
-        return "new-book-form";
+    @PutMapping
+    public ResponseEntity<BookDto> updateBook(@RequestBody BookDto book) {
+        bookService.updateBook(book);
+        return ResponseEntity
+            .ok(bookMapper.map(bookService.findBookById(book.getId())));
     }
 
-    @PostMapping("/save")
-    public String saveNewBook(BookDto book) {
-        bookService.saveBook(book);
-        return "redirect:/books";
+    @PostMapping
+    public ResponseEntity<BookDto> saveBook(@RequestBody BookDto book) {
+        return ResponseEntity.ok(bookMapper.map(bookService.saveBook(book)));
     }
 }

@@ -51,16 +51,16 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void saveBook(BookDto newBook) {
+    public Book saveBook(BookDto newBook) {
         if (Objects.nonNull(newBook.getId())) {
             var oldBook = repository.findById(newBook.getId());
-            repository.save(new Book(newBook.getId(), newBook.getTitle(), getAuthor(newBook),
-                                     getGenre(newBook),
-                                     getOldComments(oldBook)));
+            return repository.save(new Book(newBook.getId(), newBook.getTitle(), getAuthor(newBook),
+                                            getGenre(newBook),
+                                            getOldComments(oldBook)));
         } else {
-            repository.save(new Book(null, newBook.getTitle(), getAuthor(newBook),
-                                     getGenre(newBook),
-                                     null));
+            return repository.save(new Book(null, newBook.getTitle(), getAuthor(newBook),
+                                            getGenre(newBook),
+                                            null));
         }
     }
 
