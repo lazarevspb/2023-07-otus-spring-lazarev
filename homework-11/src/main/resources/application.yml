@@ -1,4 +1,10 @@
 spring:
+  webflux:
+    base-path:
+  r2dbc:
+    username: postgres
+    password: example
+    url: r2dbc:postgresql://localhost:5432/postgres?currentSchema=otus
   mvc:
     hiddenmethod:
       filter:
@@ -13,8 +19,4 @@ spring:
       hibernate:
         format_sql: true
     show-sql: true
-properties:
-  postgres:
-    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=otus
-    username: postgres
-    password: example
+

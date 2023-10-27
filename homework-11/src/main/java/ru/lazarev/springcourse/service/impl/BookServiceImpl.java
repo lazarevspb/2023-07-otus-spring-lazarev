@@ -1,24 +1,20 @@
 package ru.lazarev.springcourse.service.impl;
 
-import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
-import ru.lazarev.springcourse.domain.Author;
-import ru.lazarev.springcourse.domain.Genre;
-import ru.lazarev.springcourse.repository.BookRepository;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 import ru.lazarev.springcourse.domain.Book;
-import ru.lazarev.springcourse.domain.Comment;
 import ru.lazarev.springcourse.dto.BookDto;
+import ru.lazarev.springcourse.repository.BookRepository;
 import ru.lazarev.springcourse.service.AuthorService;
 import ru.lazarev.springcourse.service.BookService;
 import ru.lazarev.springcourse.service.GenreService;
 
 import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,58 +28,56 @@ public class BookServiceImpl implements BookService {
     GenreService genreService;
 
     @Override
-    @Transactional
-    public List<Book> findAllBooks() {
-        var bookList = repository.findAll();
-        bookList.sort(Comparator.comparing(Book::getId));
-        return bookList;
+    public Flux<BookDto> findAllBooks() {
+        return repository.findAll()
+            .publishOn(Schedulers.boundedElastic())
+            .flatMap(this::getBookDto)
+                             .sort(Comparator.comparing(BookDto::getId));
     }
 
     @Override
-    public List<Comment> findAllCommentByBookId(Long id) {
-        return repository.findById(id).get().getComments().stream()
-            .toList();
+    public Mono<BookDto> findBookById(Long id) {
+        return repository.findById(id).flatMap(this::getBookDto);
+    }
+
+    private Mono<BookDto> getBookDto(Book book) {
+        return Mono.zip(
+                authorService.findAuthorById(book.getAuthorId()),
+                genreService.findGenreById(book.getGenreId())
+            )
+            .map(tuple ->
+                     BookDto.builder()
+                         .id(book.getId())
+                         .author(tuple.getT1().getName())
+                         .genre(tuple.getT2().getName())
+                         .title(book.getTitle()).build());
     }
 
     @Override
-    public Book findBookById(Long id) {
-        return repository.findById(id).get();
+    public Mono<Void> deleteBookById(Long id) {
+       return repository.deleteById(id);
     }
 
     @Override
-    public Book saveBook(BookDto newBook) {
-        if (Objects.nonNull(newBook.getId())) {
-            var oldBook = repository.findById(newBook.getId());
-            return repository.save(new Book(newBook.getId(), newBook.getTitle(), getAuthor(newBook),
-                                            getGenre(newBook),
-                                            getOldComments(oldBook)));
-        } else {
-            return repository.save(new Book(null, newBook.getTitle(), getAuthor(newBook),
-                                            getGenre(newBook),
-                                            null));
-        }
+    public Mono<BookDto> save(BookDto newBook) {
+      return Mono.just(newBook)
+          .publishOn(Schedulers.boundedElastic())
+          .flatMap(this::getBook)
+          .flatMap(repository::save)
+          .flatMap(this::getBookDto);
+
     }
 
-    @Override
-    public void updateBook(BookDto newBook) {
-        saveBook(newBook);
-    }
-
-    private Author getAuthor(BookDto newBook) {
-        return authorService.findByName(newBook.getAuthor());
-    }
-
-    private Genre getGenre(BookDto newBook) {
-        return genreService.findByName(newBook.getGenre());
-    }
-
-    private List<Comment> getOldComments(Optional<Book> oldBook) {
-        return oldBook.map(Book::getComments).orElse(null);
-    }
-
-    @Override
-    public void deleteBookById(Long id) {
-        repository.findById(id)
-            .ifPresent(repository::delete);
+    private Mono<Book> getBook(BookDto bookDto) {
+        return Mono.zip(
+                authorService.findByName(bookDto.getAuthor()),
+                genreService.findByName(bookDto.getGenre())
+            )
+            .map(tuple ->
+                     Book.builder()
+                         .id(bookDto.getId())
+                         .authorId(tuple.getT1().getId())
+                         .genreId(tuple.getT2().getId())
+                         .title(bookDto.getTitle()).build());
     }
 }

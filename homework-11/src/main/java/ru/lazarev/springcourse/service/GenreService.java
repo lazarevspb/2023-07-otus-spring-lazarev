@@ -1,15 +1,11 @@
 package ru.lazarev.springcourse.service;
 
+import reactor.core.publisher.Mono;
 import ru.lazarev.springcourse.domain.Genre;
-import ru.lazarev.springcourse.dto.GenreDto;
-
-import java.util.List;
 
 public interface GenreService {
 
-    List<GenreDto> getAllGenre();
+    Mono<Genre> findGenreById(Long id);
 
-    Genre findGenreById(Long id);
-
-    Genre findByName(String name);
+    Mono<Genre> findByName(String name);
 }

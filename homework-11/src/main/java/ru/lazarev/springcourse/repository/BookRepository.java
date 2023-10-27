@@ -1,11 +1,9 @@
 package ru.lazarev.springcourse.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import org.springframework.stereotype.Repository;
 import ru.lazarev.springcourse.domain.Book;
 
-import java.util.List;
-
-public interface BookRepository extends CrudRepository<Book, Long> {
-
-    List<Book> findAll();
+@Repository
+public interface BookRepository extends ReactiveCrudRepository<Book, Long> {
 }

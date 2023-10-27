@@ -1,13 +1,10 @@
 package ru.lazarev.springcourse.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import reactor.core.publisher.Mono;
 import ru.lazarev.springcourse.domain.Genre;
 
-import java.util.List;
-import java.util.Optional;
+public interface GenreRepository extends ReactiveCrudRepository<Genre, Long> {
 
-public interface GenreRepository extends CrudRepository<Genre, Long> {
-    List<Genre> findAll();
-
-    Optional<Genre> findByName(String name);
+    Mono<Genre> findByName(String name);
 }

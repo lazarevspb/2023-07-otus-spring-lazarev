@@ -1,34 +1,27 @@
 package ru.lazarev.springcourse.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import ru.lazarev.springcourse.domain.Author;
-import ru.lazarev.springcourse.domain.Book;
-import ru.lazarev.springcourse.domain.Genre;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.lazarev.springcourse.dto.BookDto;
-import ru.lazarev.springcourse.mapper.BookMapper;
-import ru.lazarev.springcourse.mapper.BookMapperImpl;
+import ru.lazarev.springcourse.repository.AuthorRepository;
+import ru.lazarev.springcourse.repository.BookRepository;
+import ru.lazarev.springcourse.repository.CommentRepository;
+import ru.lazarev.springcourse.repository.GenreRepository;
 import ru.lazarev.springcourse.service.BookService;
 
-import java.util.List;
-
-import static java.util.Collections.emptyList;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@ContextConfiguration(classes = {BookController.class, BookMapperImpl.class})
-@ExtendWith(SpringExtension.class)
+@WebFluxTest(BookController.class)
 public class BookControllerTest {
 
     public static final String TITLE_1 = "title_1";
@@ -41,97 +34,98 @@ public class BookControllerTest {
     public static final long BOOK_ID_0 = 0L;
     @MockBean
     BookService bookService;
+    @MockBean
+    AuthorRepository authorRepository;
+    @MockBean
+    GenreRepository genreRepository;
+    @MockBean
+    BookRepository bookRepository;
+    @MockBean
+    CommentRepository commentRepository;
+
     @Autowired
-    BookMapper bookMapper;
+    private WebTestClient webTestClient;
 
     @Autowired
     BookController controller;
 
     @Test
-    void get_all_book_test() throws Exception {
-        var expectedList = List.of(getBook0Dto(), getBook1Dto());
-        var bookList = List.of(getBook0(), getBook1());
-        when(bookService.findAllBooks()).thenReturn(bookList);
+    void findAllBooksTest() {
+        var bookDto = getBook1Dto();
+        when(bookService.findAllBooks()).thenReturn(Flux.just(getBook0Dto(), bookDto));
 
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/v1/books")
-            .contentType(MediaType.APPLICATION_JSON);
-
-        MockMvcBuilders.standaloneSetup(controller).build().perform(requestBuilder)
-            .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.content().string(new ObjectMapper().writeValueAsString(expectedList)));
+        webTestClient.get().uri("/api/v1/books").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isOk()
+            .expectBodyList(BookDto.class).hasSize(2).contains(getBook0Dto(), bookDto);
 
         verify(bookService).findAllBooks();
     }
 
     @Test
-    void get_book_by_id_test() throws Exception {
+    void findBookByIdTest() {
+        var bookDto = getBook1Dto();
+        when(bookService.findBookById(anyLong())).thenReturn(Mono.just(bookDto));
 
-        when(bookService.findBookById(anyLong())).thenReturn(getBook1());
+        webTestClient.get().uri("/api/v1/books/{id}", BOOK_ID_1).accept(MediaType.APPLICATION_JSON).exchange()
+            .expectStatus().isOk().expectBody(BookDto.class).isEqualTo(bookDto);
 
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/v1/books/{id}", 1L)
-            .contentType(MediaType.APPLICATION_JSON);
-
-        MockMvcBuilders.standaloneSetup(controller).build().perform(requestBuilder)
-            .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.content().string(new ObjectMapper().writeValueAsString(getBook1Dto())));
-
-        verify(bookService).findBookById(1l);
+        verify(bookService).findBookById(BOOK_ID_1);
     }
 
     @Test
-    void delete_book_test() throws Exception {
+    void deleteBookByIdTest() {
+        var bookDto = getBook1Dto();
+        when(bookService.findBookById(anyLong())).thenReturn(Mono.just(bookDto));
+        when(bookService.deleteBookById(anyLong())).thenReturn(Mono.empty());
 
-        when(bookService.findBookById(anyLong())).thenReturn(getBook1());
+        webTestClient.delete().uri("/api/v1/books/{id}", BOOK_ID_1).accept(MediaType.APPLICATION_JSON).exchange()
+            .expectStatus().isNoContent();
 
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/api/v1/books/{id}", 1L)
-            .contentType(MediaType.APPLICATION_JSON);
-
-        MockMvcBuilders.standaloneSetup(controller).build().perform(requestBuilder)
-            .andExpect(MockMvcResultMatchers.status().isNoContent());
-
-        verify(bookService).deleteBookById(1l);
+        verify(bookService).deleteBookById(BOOK_ID_1);
     }
 
     @Test
-    void update_book_test() throws Exception {
-        when(bookService.findBookById(BOOK_ID_1)).thenReturn(getBook1());
+    void deleteBookByIdIfNotFoundTest() {
+        when(bookService.findBookById(anyLong())).thenReturn(Mono.empty());
+        when(bookService.deleteBookById(anyLong())).thenReturn(Mono.empty());
 
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/api/v1/books")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(new ObjectMapper().writeValueAsString(getBook1Dto()));
+        webTestClient.delete().uri("/api/v1/books/{id}", BOOK_ID_1).accept(MediaType.APPLICATION_JSON).exchange()
+            .expectStatus().isNotFound();
 
-        MockMvcBuilders.standaloneSetup(controller).build().perform(requestBuilder)
-            .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.content().string(new ObjectMapper().writeValueAsString(getBook1Dto())));
-
-        verify(bookService).updateBook(getBook1Dto());
+        verify(bookService, never()).deleteBookById(BOOK_ID_1);
     }
 
     @Test
-    void save_book_test() throws Exception {
-        when(bookService.saveBook(getBook1Dto())).thenReturn(getBook1());
+    void updateBookTest() {
+        var bookDto = getBook1Dto();
+        when(bookService.findBookById(anyLong())).thenReturn(Mono.just(bookDto));
+        when(bookService.save(any())).thenReturn(Mono.just(bookDto));
 
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/v1/books")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(new ObjectMapper().writeValueAsString(getBook1Dto()));
+        webTestClient.put().uri("/api/v1/books").bodyValue(bookDto).accept(MediaType.APPLICATION_JSON).exchange()
+            .expectStatus().isOk();
 
-        MockMvcBuilders.standaloneSetup(controller).build().perform(requestBuilder)
-            .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.content().string(new ObjectMapper().writeValueAsString(getBook1Dto())));
-
-        verify(bookService).saveBook(getBook1Dto());
+        verify(bookService).save(bookDto);
     }
 
-    private Book getBook0() {
-        return new Book(BOOK_ID_0, TITLE_0, new Author(1L, AUTHOR_NAME_0), new Genre(1L, GENRE_NAME_0), emptyList());
+    @Test
+    void updateBookTestIfNotFound() {
+        when(bookService.findBookById(anyLong())).thenReturn(Mono.empty());
+        var bookDto = getBook1Dto();
+
+        webTestClient.put().uri("/api/v1/books").bodyValue(bookDto).accept(MediaType.APPLICATION_JSON).exchange()
+            .expectStatus().isNotFound();
+
+        verify(bookService, never()).save(bookDto);
     }
 
-    private Book getBook1() {
-        return new Book(BOOK_ID_1, TITLE_1, new Author(2L, AUTHOR_NAME_1), new Genre(1L, GENRE_NAME_1), emptyList());
+    @Test
+    void saveBookTest() {
+        var bookDto = getBook1Dto();
+        when(bookService.save(any())).thenReturn(Mono.just(bookDto));
+
+        webTestClient.post().uri("/api/v1/books").bodyValue(bookDto).accept(MediaType.APPLICATION_JSON).exchange()
+            .expectStatus().isOk().expectBody(BookDto.class).isEqualTo(bookDto);
+
+        verify(bookService).save(bookDto);
     }
 
     private BookDto getBook1Dto() {

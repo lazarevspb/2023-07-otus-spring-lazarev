@@ -15,14 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.lazarev.springcourse.dto.BookDto;
-import ru.lazarev.springcourse.mapper.BookMapper;
-import ru.lazarev.springcourse.service.AuthorService;
 import ru.lazarev.springcourse.service.BookService;
-import ru.lazarev.springcourse.service.GenreService;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -31,36 +27,37 @@ import java.util.stream.Collectors;
 @RequestMapping("api/v1/books")
 public class BookController {
     BookService bookService;
-    BookMapper bookMapper;
 
-    @GetMapping
-    public ResponseEntity<List<BookDto>> getAllBooks() {
-        var books = bookService.findAllBooks().stream()
-            .map(bookMapper::map).collect(Collectors.toList());
-        return ResponseEntity.ok(books);
+    @GetMapping("")
+    public Flux<BookDto> getAllBooks() {
+        return bookService.findAllBooks();
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<BookDto> getBookById(@PathVariable Long id) {
-        return ResponseEntity.ok(bookMapper.map(bookService.findBookById(id)));
+    public Mono<BookDto> getBookById(@PathVariable Long id) {
+        return bookService.findBookById(id);
+
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
-        bookService.deleteBookById(id);
-        return ResponseEntity.noContent().build();
+    public Mono<ResponseEntity<Void>> deleteBook(@PathVariable Long id) {
+        return bookService.findBookById(id)
+            .flatMap(existingBook -> bookService.deleteBookById(existingBook.getId())
+                .then(Mono.just(new ResponseEntity<Void>(HttpStatus.NO_CONTENT))))
+            .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PutMapping
-    public ResponseEntity<BookDto> updateBook(@RequestBody BookDto book) {
-        bookService.updateBook(book);
-        return ResponseEntity
-            .ok(bookMapper.map(bookService.findBookById(book.getId())));
+    public Mono<ResponseEntity<Void>> updateBook(@RequestBody BookDto book) {
+            return bookService.findBookById(book.getId())
+            .flatMap(bookDto -> bookService.save(book)
+                .then(Mono.just(new ResponseEntity<Void>(HttpStatus.OK))))
+            .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping
-    public ResponseEntity<BookDto> saveBook(@RequestBody BookDto book) {
-        return ResponseEntity.ok(bookMapper.map(bookService.saveBook(book)));
+    public Mono<BookDto> saveBook(@RequestBody BookDto book) {
+        return bookService.save(book);
     }
 }

@@ -1,22 +1,17 @@
 package ru.lazarev.springcourse.service;
 
-import ru.lazarev.springcourse.domain.Book;
-import ru.lazarev.springcourse.domain.Comment;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.lazarev.springcourse.dto.BookDto;
-
-import java.util.List;
 
 public interface BookService {
 
-    List<Book> findAllBooks();
+    Flux<BookDto> findAllBooks();
 
-    List<Comment> findAllCommentByBookId(Long id);
+    Mono<BookDto> findBookById(Long id);
 
-    Book findBookById(Long id);
+    Mono<BookDto> save(BookDto book);
 
-    Book saveBook(BookDto book);
+    Mono<Void> deleteBookById(Long id);
 
-    void updateBook(BookDto book);
-
-    void deleteBookById(Long id);
 }
