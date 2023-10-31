@@ -1,0 +1,22 @@
+spring:
+  webflux:
+    base-path:
+  r2dbc:
+    username: postgres
+    password: example
+    url: r2dbc:postgresql://localhost:5432/postgres?currentSchema=otus
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+  flyway:
+    baselineOnMigrate: true
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+
