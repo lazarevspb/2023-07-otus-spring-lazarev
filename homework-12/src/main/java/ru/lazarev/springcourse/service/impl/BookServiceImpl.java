@@ -1,10 +1,10 @@
 package ru.lazarev.springcourse.service.impl;
 
-import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.lazarev.springcourse.domain.Author;
 import ru.lazarev.springcourse.domain.Genre;
 import ru.lazarev.springcourse.repository.BookRepository;
@@ -19,6 +19,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +43,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Comment> findAllCommentByBookId(Long id) {
         return repository.findById(id).get().getComments().stream()
-            .toList();
+            .collect(Collectors.toList());
     }
 
     @Override

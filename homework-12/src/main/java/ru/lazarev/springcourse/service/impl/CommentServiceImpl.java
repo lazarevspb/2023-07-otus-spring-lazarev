@@ -1,6 +1,5 @@
 package ru.lazarev.springcourse.service.impl;
 
-import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

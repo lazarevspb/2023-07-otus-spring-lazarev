@@ -18,6 +18,8 @@ import ru.lazarev.springcourse.service.AuthorService;
 import ru.lazarev.springcourse.service.BookService;
 import ru.lazarev.springcourse.service.GenreService;
 
+import java.util.stream.Collectors;
+
 @Controller
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
@@ -32,7 +34,7 @@ public class BookController {
     @GetMapping
     public String getAllBooks(Model model) {
         var books = bookService.findAllBooks().stream()
-            .map(bookMapper::map);
+            .map(bookMapper::map).collect(Collectors.toList());
         model.addAttribute("books", books);
         return "index";
     }

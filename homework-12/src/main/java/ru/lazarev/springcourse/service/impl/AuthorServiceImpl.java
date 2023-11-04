@@ -11,6 +11,7 @@ import ru.lazarev.springcourse.repository.AuthorRepository;
 import ru.lazarev.springcourse.service.AuthorService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +26,7 @@ public class AuthorServiceImpl implements AuthorService {
     public List<AuthorDto> getAllAuthor() {
         return repository.findAll().stream()
             .map(mapper::map)
-            .toList();
+            .collect(Collectors.toList());
     }
 
     @Override

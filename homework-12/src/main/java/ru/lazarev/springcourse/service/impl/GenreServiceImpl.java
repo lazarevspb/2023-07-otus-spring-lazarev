@@ -11,6 +11,7 @@ import ru.lazarev.springcourse.mapper.GenreMapper;
 import ru.lazarev.springcourse.service.GenreService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +27,7 @@ public class GenreServiceImpl implements GenreService {
         return repository.findAll()
             .stream()
             .map(mapper::map)
-            .toList();
+            .collect(Collectors.toList());
     }
 
     @Override
