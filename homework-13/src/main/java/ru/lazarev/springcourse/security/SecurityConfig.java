@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,10 +22,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            .cors().and()
             .csrf().disable()
             .authorizeHttpRequests((authorize) -> authorize
                 .antMatchers("/login").permitAll()
-                .antMatchers("/books/**", "/").authenticated()
+                .antMatchers("/books", "/").authenticated()
+                .antMatchers("/books/edit").hasRole("ADMIN")
+                .antMatchers("/books/new").hasRole("ROLE_ADMIN")
             )
             .userDetailsService(userDetailsService)
             .formLogin().defaultSuccessUrl("/books", true)

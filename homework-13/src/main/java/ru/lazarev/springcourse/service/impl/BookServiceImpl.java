@@ -3,6 +3,7 @@ package ru.lazarev.springcourse.service.impl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.lazarev.springcourse.domain.Author;
@@ -52,6 +53,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void saveBook(BookDto newBook) {
         if (Objects.nonNull(newBook.getId())) {
             var oldBook = repository.findById(newBook.getId());
@@ -66,6 +68,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void updateBook(BookDto newBook) {
         saveBook(newBook);
     }
@@ -83,6 +86,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteBookById(Long id) {
         repository.findById(id)
             .ifPresent(repository::delete);
