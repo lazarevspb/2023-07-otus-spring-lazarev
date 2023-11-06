@@ -4,11 +4,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.lazarev.springcourse.mapper.BookMapperImpl;
+import ru.lazarev.springcourse.repository.BookRepository;
+import ru.lazarev.springcourse.service.AuthorService;
+import ru.lazarev.springcourse.service.BookService;
+import ru.lazarev.springcourse.service.GenreService;
+import ru.lazarev.springcourse.service.impl.BookServiceImpl;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -16,12 +22,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(BookControllerTest.class)
-@Import({BookControllerTest.class, BookMapperImpl.class})
+@WebMvcTest(BookController.class)
+@Import({BookController.class, BookMapperImpl.class, BookServiceImpl.class})
 public class SecurityControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+    @MockBean
+    BookRepository repository;
+    @MockBean
+    AuthorService authorService;
+    @MockBean
+    GenreService genreService;
 
     @Test
     public void should_login_page_must_be_available_without_authentication() throws Exception {
