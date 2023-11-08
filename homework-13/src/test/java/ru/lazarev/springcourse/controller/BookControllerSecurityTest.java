@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(BookController.class)
 @Import(SecurityConfig.class)
-public class SecurityControllerTest {
+public class BookControllerSecurityTest {
 
     @MockBean
     BookRepository repository;
