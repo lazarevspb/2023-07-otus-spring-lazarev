@@ -5,7 +5,6 @@ import org.bson.types.ObjectId;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import ru.lazarev.springcourse.mongo.MongoBook;
-import ru.lazarev.springcourse.postgres.Genre;
 import ru.lazarev.springcourse.postgres.PostgresBook;
 
 import java.util.HashMap;
@@ -15,7 +14,6 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 public class BookJpaToMongoConverter implements Converter<PostgresBook, MongoBook> {
-
 
     private final Map<Long, MongoBook> cache = new HashMap<>();
 

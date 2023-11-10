@@ -14,9 +14,7 @@ import static lombok.AccessLevel.PRIVATE;
 @ConfigurationProperties("properties.postgres")
 @Component
 public class PostgresProperties {
-
     String url;
     String username;
     String password;
-
 }

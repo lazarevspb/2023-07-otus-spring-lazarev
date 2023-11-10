@@ -2,39 +2,26 @@ spring:
   batch:
     job:
       enabled: false
-    jdbc:
-      initialize-schema: always
+#    jdbc:
+#      initialize-schema: always
   shell:
     interactive:
       enabled: true
     noninteractive:
       enabled: false
+
     command:
       version:
         enabled: false
   main:
-    allow-bean-definition-overriding: true
     allow-circular-references: true
 
   data:
     mongodb:
       host: localhost
-      port: 27017
+      port: 27999
       database: otus
-  mvc:
-    hiddenmethod:
-      filter:
-        enabled: true
-  flyway:
-    baselineOnMigrate: true
-  jpa:
-    generate-ddl: false
-    hibernate:
-      ddl-auto: none
-    properties:
-      hibernate:
-        format_sql: true
-    show-sql: true
+
 properties:
   postgres:
     url: jdbc:postgresql://localhost:5432/postgres?currentSchema=otus
@@ -48,9 +35,6 @@ mongock:
     write-concern:
       journal: false
     read-concern: local
-
-app:
-  ages-count-to-add: 1
 
 de:
   flapdoodle:
