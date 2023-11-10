@@ -42,8 +42,4 @@ public class PostgresBook {
     @ManyToOne
     @JoinColumn(name = "genre_id", nullable = false)
     Genre genre;
-
-    @EqualsAndHashCode.Exclude
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "book")
-    private List<Comment> comments;
 }
