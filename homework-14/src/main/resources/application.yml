@@ -1,0 +1,43 @@
+spring:
+  batch:
+    job:
+      enabled: false
+#    jdbc:
+#      initialize-schema: always
+  shell:
+    interactive:
+      enabled: true
+    noninteractive:
+      enabled: false
+
+    command:
+      version:
+        enabled: false
+  main:
+    allow-circular-references: true
+
+  data:
+    mongodb:
+      host: localhost
+      port: 27999
+      database: otus
+
+properties:
+  postgres:
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=otus
+    username: postgres
+    password: example
+
+mongock:
+  runner-type: "InitializingBean"
+  change-logs-scan-package: ru.lazarev.springcourse.db.migration
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
+
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 4.0.2
