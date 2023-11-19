@@ -30,11 +30,11 @@ public class IntegrationConfig {
     }
 
     @Bean
-    public IntegrationFlow cafeFlow(CarService carService) {
+    public IntegrationFlow carAssemblingFlow(CarService carService) {
         return IntegrationFlow.from(partsChannel())
             .split()
             .handle(carService, "assembling")
-            .<Car, Car>transform(f -> new Car(f.getName().toUpperCase()))
+            .<Car, Car>transform(f -> new Car("Super New %s".formatted(f.getName().toUpperCase())))
             .aggregate()
             .channel(carChannel())
             .get();

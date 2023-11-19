@@ -4,7 +4,7 @@ package ru.otus.spring.integration.services;
 import org.springframework.integration.annotation.Gateway;
 import org.springframework.integration.annotation.MessagingGateway;
 import ru.otus.spring.integration.domain.Car;
-import ru.otus.spring.integration.domain.Part;
+import ru.otus.spring.integration.domain.CarBrand;
 
 import java.util.Collection;
 
@@ -12,5 +12,5 @@ import java.util.Collection;
 public interface CarFactoryGateway {
 
     @Gateway(requestChannel = "partsChannel", replyChannel = "carChannel")
-    Collection<Car> process(Collection<Part> part);
+    Collection<Car> process(Collection<CarBrand> carBrand);
 }

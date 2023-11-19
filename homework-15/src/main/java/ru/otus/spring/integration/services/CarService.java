@@ -1,9 +1,8 @@
 package ru.otus.spring.integration.services;
 
 import ru.otus.spring.integration.domain.Car;
-import ru.otus.spring.integration.domain.Part;
+import ru.otus.spring.integration.domain.CarBrand;
 
 public interface CarService {
-
-	Car assembling(Part part);
+    Car assembling(CarBrand carBrand);
 }
