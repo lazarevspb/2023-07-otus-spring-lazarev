@@ -20,18 +20,16 @@ properties:
     username: postgres
     password: example
 
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  endpoint:
-    health:
-      show-details: always
-    logfile:
-      enabled: true
-
 logging:
   file:
     path: ./src/main/resources
+
+resilience4j.circuitbreaker:
+  instances:
+    myCircuitBreaker:
+      registerHealthIndicator: true
+      ringBufferSizeInClosedState: 10
+      ringBufferSizeInHalfOpenState: 3
+      waitDurationInOpenState: 1s
+      failureRateThreshold: 50
+      eventConsumerBufferSize: 10
