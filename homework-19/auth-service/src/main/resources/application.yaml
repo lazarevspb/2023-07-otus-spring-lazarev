@@ -1,0 +1,24 @@
+server:
+  port: 8081
+
+jwt:
+  secret: CuKq7g3eOzsc3FKu8O7hoeo0IegTHCKHBKkkN3XdCCwIZw5p5x
+  lifetime: 10m
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=otus-auth
+    username: postgres
+    password: example
+  flyway:
+    baselineOnMigrate: true
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+  main:
+    allow-circular-references: true
