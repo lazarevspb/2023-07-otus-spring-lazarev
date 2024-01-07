@@ -17,10 +17,10 @@
     <packaging>pom</packaging>
     <modules>
         <module>auth-service</module>
-        <module>store-service</module>
+        <module>library-service</module>
         <module>eureka-server</module>
         <module>zuul-proxy</module>
-        <module>library</module>
+        <module>storage-service</module>
     </modules>
 
 </project>

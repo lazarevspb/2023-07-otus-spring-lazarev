@@ -1,0 +1,29 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: otus
+  application:
+    name: storage
+  server:
+    port: 0
+  eureka:
+    client:
+      serviceUrl:
+        defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+    instance:
+      preferIpAddress: true
+
+mongock:
+  runner-type: "InitializingBean"
+  change-logs-scan-package: ru.lazarev.springcourse.db.migration
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
+server:
+  port: 8083
+
