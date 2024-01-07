@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -19,12 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.lazarev.springcourse.dto.BookDto;
+import ru.lazarev.springcourse.feign.StorageServiceProxy;
 import ru.lazarev.springcourse.mapper.BookMapper;
-import ru.lazarev.springcourse.service.AuthorService;
 import ru.lazarev.springcourse.service.BookService;
-import ru.lazarev.springcourse.service.GenreService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +33,12 @@ import java.util.stream.Collectors;
 public class BookController {
     BookService bookService;
     BookMapper bookMapper;
+    StorageServiceProxy storageServiceProxy;
+
+    @GetMapping("/content/{id}")
+    public ResponseEntity<?> getContentByBookId(@PathVariable Long id) {
+        return ResponseEntity.ok(storageServiceProxy.getContent(id));
+    }
 
     @GetMapping
     @Secured({"ROLE_USER", "ROLE_GUEST", "ROLE_ADMIN"})

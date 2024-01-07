@@ -10,5 +10,9 @@ angular.module('app').controller('BooksDetailsController', function ($scope, $ht
         });
     };
 
+    $scope.getContentPage = function (bookId) {
+        $location.path('/content/' +  bookId);
+    }
+
     $scope.getBook();
 });

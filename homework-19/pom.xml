@@ -20,6 +20,7 @@
         <module>store-service</module>
         <module>eureka-server</module>
         <module>zuul-proxy</module>
+        <module>library</module>
     </modules>
 
 </project>

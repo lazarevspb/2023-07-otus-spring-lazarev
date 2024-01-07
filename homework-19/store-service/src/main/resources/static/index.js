@@ -28,7 +28,6 @@
                 templateUrl: 'edit/edit.html',
                 controller: 'EditBookController'
             })
-
             .when('/books/:id', {
                 templateUrl: 'details/details.html',
                 controller: 'BooksDetailsController',
@@ -36,6 +35,10 @@
             .when('/add/', {
                 templateUrl: 'add/add.html',
                 controller: 'AddBookController',
+            })
+            .when('/content/:id', {
+                templateUrl: 'content/content.html',
+                controller: 'ContentController',
             })
             .when('/login', {
                 templateUrl: 'login/login.html',
