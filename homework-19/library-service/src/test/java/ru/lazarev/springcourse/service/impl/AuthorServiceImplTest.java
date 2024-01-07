@@ -3,17 +3,18 @@ package ru.lazarev.springcourse.service.impl;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.junit.jupiter.api.Test;
-import ru.lazarev.springcourse.mapper.AuthorMapperImpl;
+import ru.lazarev.springcourse.library.service.impl.AuthorServiceImpl;
+import ru.lazarev.springcourse.library.mapper.AuthorMapperImpl;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import ru.lazarev.springcourse.domain.Author;
-import ru.lazarev.springcourse.dto.AuthorDto;
-import ru.lazarev.springcourse.mapper.AuthorMapper;
-import ru.lazarev.springcourse.repository.AuthorRepository;
-import ru.lazarev.springcourse.service.AuthorService;
+import ru.lazarev.springcourse.library.domain.Author;
+import ru.lazarev.springcourse.library.dto.AuthorDto;
+import ru.lazarev.springcourse.library.mapper.AuthorMapper;
+import ru.lazarev.springcourse.library.repository.AuthorRepository;
+import ru.lazarev.springcourse.library.service.AuthorService;
 
 import java.util.List;
 

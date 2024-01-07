@@ -5,8 +5,8 @@ import lombok.experimental.FieldDefaults;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import ru.lazarev.springcourse.domain.Author;
-import ru.lazarev.springcourse.repository.AuthorRepository;
+import ru.lazarev.springcourse.library.domain.Author;
+import ru.lazarev.springcourse.library.repository.AuthorRepository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

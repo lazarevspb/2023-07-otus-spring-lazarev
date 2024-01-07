@@ -8,12 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import ru.lazarev.springcourse.domain.Genre;
-import ru.lazarev.springcourse.dto.GenreDto;
-import ru.lazarev.springcourse.mapper.GenreMapper;
-import ru.lazarev.springcourse.mapper.GenreMapperImpl;
-import ru.lazarev.springcourse.repository.GenreRepository;
-import ru.lazarev.springcourse.service.GenreService;
+import ru.lazarev.springcourse.library.domain.Genre;
+import ru.lazarev.springcourse.library.dto.GenreDto;
+import ru.lazarev.springcourse.library.mapper.GenreMapper;
+import ru.lazarev.springcourse.library.service.impl.GenreServiceImpl;
+import ru.lazarev.springcourse.library.mapper.GenreMapperImpl;
+import ru.lazarev.springcourse.library.repository.GenreRepository;
+import ru.lazarev.springcourse.library.service.GenreService;
 
 import java.util.List;
 

@@ -4,12 +4,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import ru.lazarev.springcourse.domain.Author;
-import ru.lazarev.springcourse.domain.Book;
-import ru.lazarev.springcourse.domain.Comment;
-import ru.lazarev.springcourse.domain.Genre;
-import ru.lazarev.springcourse.dto.CommentDto;
-import ru.lazarev.springcourse.repository.CommentRepository;
+import ru.lazarev.springcourse.library.domain.Author;
+import ru.lazarev.springcourse.library.domain.Book;
+import ru.lazarev.springcourse.library.domain.Comment;
+import ru.lazarev.springcourse.library.domain.Genre;
+import ru.lazarev.springcourse.library.dto.CommentDto;
+import ru.lazarev.springcourse.library.repository.CommentRepository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

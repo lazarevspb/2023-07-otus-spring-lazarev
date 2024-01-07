@@ -12,13 +12,14 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import ru.lazarev.springcourse.domain.Author;
-import ru.lazarev.springcourse.domain.Book;
-import ru.lazarev.springcourse.domain.Genre;
-import ru.lazarev.springcourse.dto.BookDto;
-import ru.lazarev.springcourse.mapper.BookMapper;
-import ru.lazarev.springcourse.mapper.BookMapperImpl;
-import ru.lazarev.springcourse.service.BookService;
+import ru.lazarev.springcourse.library.controller.BookController;
+import ru.lazarev.springcourse.library.domain.Author;
+import ru.lazarev.springcourse.library.domain.Book;
+import ru.lazarev.springcourse.library.domain.Genre;
+import ru.lazarev.springcourse.library.dto.BookDto;
+import ru.lazarev.springcourse.library.mapper.BookMapper;
+import ru.lazarev.springcourse.library.mapper.BookMapperImpl;
+import ru.lazarev.springcourse.library.service.BookService;
 
 import java.util.List;
 
