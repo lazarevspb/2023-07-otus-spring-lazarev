@@ -17,8 +17,8 @@
         <td>{{b.author}}</td>
         <td>{{b.genre}}</td>
         <td>
-            <button class="btn btn-primary" ng-click="editBook(b.id)">Edit</button>
-            <button class="btn btn-primary" ng-click="deleteBook(b.id)">delete</button>
+            <button class="btn btn-primary" ng-show= "isUserLoggedIn()" ng-click="editBook(b.id)">Edit</button>
+            <button class="btn btn-primary" ng-show= "isUserLoggedIn()" ng-click="deleteBook(b.id)">delete</button>
         </td>
     </tr>
     </tbody>

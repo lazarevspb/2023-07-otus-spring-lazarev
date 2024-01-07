@@ -1,4 +1,4 @@
-package ru.lazarev.springcourse.controllers;
+package ru.lazarev.springcourse.controller;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class AuthController {
     UserService userService;
     UserMapper mapper;
 
-    @PostMapping("/auth")
+    @PostMapping("/")
     public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest) {
         return ResponseEntity.ok(new JwtResponse(authService.createAuthToken(authRequest)));
     }

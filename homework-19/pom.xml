@@ -18,6 +18,8 @@
     <modules>
         <module>auth-service</module>
         <module>store-service</module>
+        <module>eureka-server</module>
+        <module>zuul-proxy</module>
     </modules>
 
 </project>

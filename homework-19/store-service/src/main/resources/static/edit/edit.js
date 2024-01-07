@@ -1,5 +1,5 @@
 angular.module('app').controller('EditBookController', function ($scope, $http, $routeParams, $localStorage, $location) {
-    const contextPath = 'http://localhost:8080/api/v1';
+    const contextPath = 'http://localhost:8082/store/api/v1';
 
     $scope.fetchBookData = function () {
         $http({

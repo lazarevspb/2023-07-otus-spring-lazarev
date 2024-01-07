@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class AuthServiceApplication {
-	//http://localhost:8189
+	//http://localhost:8081
 	// user@user
 	//admin@admin
 	public static void main(String[] args) {

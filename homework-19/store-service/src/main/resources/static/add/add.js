@@ -1,5 +1,5 @@
 angular.module('app').controller('AddBookController', function ($scope, $http, $routeParams, $localStorage, $location) {
-    const contextPath = 'http://localhost:8080/api/v1';
+    const contextPath = 'http://localhost:8082/store/api/v1';
 
     $scope.addBook = function () {
         $http({
@@ -13,5 +13,5 @@ angular.module('app').controller('AddBookController', function ($scope, $http, $
         });
     };
 
-    $scope.addBook();
+    // $scope.addBook();
 });

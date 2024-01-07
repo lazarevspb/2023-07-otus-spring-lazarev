@@ -1,13 +1,32 @@
 angular.module('app').controller('bookController', function ($scope, $http,$location, $localStorage) {
-    const contextPath = 'http://localhost:8080/api/v1';
+    const contextPath = 'http://localhost:8082/store/api/v1';
+    let token = null;
+    if ($localStorage.currentUser && $localStorage.currentUser.token) {
+        let currentUser = $localStorage.currentUser;
+        token = currentUser.token;
+    } else {
+        console.log('No user data found');
+    }
 
     $scope.showProductsPage = function () {
-        $http({
-            url: contextPath + '/books',
-            method: 'GET',
-        }).then(function (response) {
-            $scope.books = response.data;
-        });
+        if (token){
+            $http({
+                url: contextPath + '/books',
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            }).then(function (response) {
+                $scope.books = response.data;
+            });
+        } else {
+            $http({
+                url: contextPath + '/books',
+                method: 'GET',
+            }).then(function (response) {
+                $scope.books = response.data;
+            });
+        }
     };
 
     $scope.editBook = function (bookId) {
@@ -31,6 +50,15 @@ angular.module('app').controller('bookController', function ($scope, $http,$loca
             $location.path('/books');
         });
     }
+
+    $scope.isUserLoggedIn = function () {
+        if ($localStorage.currentUser) {
+            $scope.currentUserName = $localStorage.currentUser.username;
+            return true;
+        } else {
+            return false;
+        }
+    };
 
     $scope.showProductsPage();
 });
