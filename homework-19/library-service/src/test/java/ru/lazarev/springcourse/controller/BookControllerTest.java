@@ -52,7 +52,7 @@ public class BookControllerTest {
     void get_all_book_test() throws Exception {
         var expectedList = List.of(getBook0Dto(), getBook1Dto());
         var bookList = List.of(getBook0(), getBook1());
-        when(bookService.findAllBooks()).thenReturn(bookList);
+        when(bookService.findAllBooks(anyLong())).thenReturn(bookList);
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/v1/books")
             .contentType(MediaType.APPLICATION_JSON);
@@ -62,13 +62,13 @@ public class BookControllerTest {
             .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.content().string(new ObjectMapper().writeValueAsString(expectedList)));
 
-        verify(bookService).findAllBooks();
+        verify(bookService).findAllBooks(anyLong());
     }
 
     @Test
     void get_book_by_id_test() throws Exception {
 
-        when(bookService.findBookById(anyLong())).thenReturn(getBook1());
+        when(bookService.findBookById(anyLong(), anyLong())).thenReturn(getBook1());
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/v1/books/{id}", 1L)
             .contentType(MediaType.APPLICATION_JSON);
@@ -78,13 +78,13 @@ public class BookControllerTest {
             .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.content().string(new ObjectMapper().writeValueAsString(getBook1Dto())));
 
-        verify(bookService).findBookById(1l);
+        verify(bookService).findBookById(1L, anyLong());
     }
 
     @Test
     void delete_book_test() throws Exception {
 
-        when(bookService.findBookById(anyLong())).thenReturn(getBook1());
+        when(bookService.findBookById(anyLong(), anyLong())).thenReturn(getBook1());
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/api/v1/books/{id}", 1L)
             .contentType(MediaType.APPLICATION_JSON);
@@ -92,12 +92,12 @@ public class BookControllerTest {
         MockMvcBuilders.standaloneSetup(controller).build().perform(requestBuilder)
             .andExpect(MockMvcResultMatchers.status().isNoContent());
 
-        verify(bookService).deleteBookById(1l);
+        verify(bookService).deleteBookById(1l, anyLong());
     }
 
     @Test
     void update_book_test() throws Exception {
-        when(bookService.findBookById(BOOK_ID_1)).thenReturn(getBook1());
+        when(bookService.findBookById(BOOK_ID_1, anyLong())).thenReturn(getBook1());
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/api/v1/books")
             .contentType(MediaType.APPLICATION_JSON)
@@ -108,12 +108,12 @@ public class BookControllerTest {
             .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.content().string(new ObjectMapper().writeValueAsString(getBook1Dto())));
 
-        verify(bookService).updateBook(getBook1Dto());
+        verify(bookService).updateBook(getBook1Dto(), anyLong());
     }
 
     @Test
     void save_book_test() throws Exception {
-        when(bookService.saveBook(getBook1Dto())).thenReturn(getBook1());
+        when(bookService.saveBook(getBook1Dto(), anyLong())).thenReturn(getBook1());
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/v1/books")
             .contentType(MediaType.APPLICATION_JSON)
@@ -124,7 +124,7 @@ public class BookControllerTest {
             .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.content().string(new ObjectMapper().writeValueAsString(getBook1Dto())));
 
-        verify(bookService).saveBook(getBook1Dto());
+        verify(bookService).saveBook(getBook1Dto(), anyLong());
     }
 
     private Book getBook0() {

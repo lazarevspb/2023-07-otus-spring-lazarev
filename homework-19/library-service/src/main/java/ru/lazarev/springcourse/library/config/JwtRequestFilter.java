@@ -8,6 +8,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import ru.lazarev.springcourse.library.dto.TokenVerifyRequest;
+import ru.lazarev.springcourse.library.feign.AuthServiceProxy;
 import ru.lazarev.springcourse.library.utils.JwtTokenUtil;
 
 import javax.servlet.FilterChain;
@@ -22,17 +24,21 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtRequestFilter extends OncePerRequestFilter {
+    public static final String AUTHORIZATION = "Authorization";
     private final JwtTokenUtil jwtTokenUtil;
+    private final AuthServiceProxy authServiceProxy;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
         throws ServletException, IOException {
-        String authHeader = request.getHeader("Authorization");
+        String authHeader = request.getHeader(AUTHORIZATION);
 
         String username = null;
         String jwt = null;
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
+            var userProfile = authServiceProxy.getUserByToken(TokenVerifyRequest.builder().token(jwt).build());
+            System.out.println("userProfile = " + userProfile);
             try {
                 username = jwtTokenUtil.getUsername(jwt);
             } catch (ExpiredJwtException e) {
@@ -53,6 +59,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                                                                     Collectors.toList()));
                 SecurityContextHolder.getContext().setAuthentication(token);
             }
+
+
 
             filterChain.doFilter(request, response);
         } else {

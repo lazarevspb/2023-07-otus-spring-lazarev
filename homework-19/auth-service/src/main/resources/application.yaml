@@ -5,7 +5,7 @@ server:
 
 jwt:
   secret: CuKq7g3eOzsc3FKu8O7hoeo0IegTHCKHBKkkN3XdCCwIZw5p5x
-  lifetime: 10m
+  lifetime: 10000m
 spring:
   application:
     name: auth

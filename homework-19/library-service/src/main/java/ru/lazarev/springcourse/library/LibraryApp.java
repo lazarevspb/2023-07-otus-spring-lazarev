@@ -7,7 +7,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableFeignClients(basePackages = "ru.lazarev.springcourse.library.feign")
 public class LibraryApp {
-    //    http://localhost:8080
+    //    http://localhost:8082/library/#!/
     public static void main(String[] args) {
         SpringApplication.run(LibraryApp.class, args);
     }

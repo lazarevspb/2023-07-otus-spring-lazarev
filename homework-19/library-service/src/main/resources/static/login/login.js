@@ -28,22 +28,6 @@ angular.module('app').controller('LoginController', function ($scope, $http, $lo
     };
 
 
-    // $scope.tryToLogout = function () {
-    //     $scope.clearUser();
-    //
-    //     $http.post(contextPath + '/api/v1/cart')
-    //         .then(function successCallback(response) {
-    //             $localStorage.happyCartUuid = response.data;
-    //         });
-    //
-    //     $location.path('/');
-    //     if ($scope.user.username) {
-    //         $scope.user.username = null;
-    //     }
-    //     if ($scope.user.password) {
-    //         $scope.user.password = null;
-    //     }
-    // };
 
     $scope.clearUser = function () {
         delete $localStorage.currentUser;
@@ -57,5 +41,9 @@ angular.module('app').controller('LoginController', function ($scope, $http, $lo
             return false;
         }
     };
+
+    $scope.getRegistrationPage = function () {
+        $location.path('/registration/');
+    }
 
 });

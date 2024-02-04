@@ -32,8 +32,9 @@
                         <a class="nav-link" href="#!/login">Login or register</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#!/home">About</a>
+                        <a class="nav-link" href="#!/about">About</a>
                     </li>
+
                     <li class="nav-item" ng-if="isUserLoggedIn()">
                         <button class="btn btn-outline-secondary" ng-click="tryToLogout()">Выйти</button>
                     </li>
@@ -52,12 +53,14 @@
 
     <script src="index.js"></script>
     <script src="home/home.js"></script>
+    <script src="about/about.js"></script>
     <script src="edit/edit.js"></script>
     <script src="books/books.js"></script>
     <script src="add/add.js"></script>
     <script src="details/details.js"></script>
     <script src="content/content.js"></script>
     <script src="login/login.js"></script>
+    <script src="registration/registration.js"></script>
 
 </div>
 </body>

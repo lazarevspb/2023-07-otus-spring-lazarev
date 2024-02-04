@@ -21,6 +21,7 @@
         <module>eureka-server</module>
         <module>zuul-proxy</module>
         <module>storage-service</module>
+        <module>audit-service</module>
     </modules>
 
 </project>

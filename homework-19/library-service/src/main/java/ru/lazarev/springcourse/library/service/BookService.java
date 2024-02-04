@@ -8,15 +8,15 @@ import java.util.List;
 
 public interface BookService {
 
-    List<Book> findAllBooks();
+    List<Book> findAllBooks(Long userId);
 
-    List<Comment> findAllCommentByBookId(Long id);
+    List<Comment> findAllCommentByBookId(Long bookId, Long userId);
 
-    Book findBookById(Long id);
+    Book findBookById(Long bookId, Long userId);
 
-    Book saveBook(BookDto book);
+    Book saveBook(BookDto book, Long userId);
 
-    void updateBook(BookDto book);
+    void updateBook(BookDto book, Long userId);
 
-    void deleteBookById(Long id);
+    void deleteBookById(Long bookId, Long userId);
 }

@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+import ru.lazarev.springcourse.library.model.UserProfile;
 import ru.lazarev.springcourse.library.service.BookService;
 import ru.lazarev.springcourse.library.service.CommentService;
 import ru.lazarev.springcourse.library.repository.CommentRepository;
@@ -28,13 +29,13 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void saveComment(CommentDto commentDto) {
         commentDto.setId(null);
-        var book = bookService.findBookById(commentDto.getBookId());
+        var book = bookService.findBookById(commentDto.getBookId(), null);
         repository.save(commentMapper.map(commentDto, book));
     }
 
     @Override
     public void updateComment(CommentDto commentDto) {
-        var book = bookService.findBookById(commentDto.getBookId());
+        var book = bookService.findBookById(commentDto.getBookId(), null);
         repository.save(commentMapper.map(commentDto, book));
     }
 

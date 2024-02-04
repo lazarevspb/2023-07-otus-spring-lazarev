@@ -23,6 +23,9 @@ spring:
       hibernate:
         format_sql: true
     show-sql: true
+  kafka:
+    topics:
+      audit: library-audit-topic
 properties:
   postgres:
     url: jdbc:postgresql://localhost:5432/postgres?currentSchema=otus

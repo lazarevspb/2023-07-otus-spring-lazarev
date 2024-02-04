@@ -1,0 +1,57 @@
+server:
+  port: 8084
+  servlet:
+    context-path: /audit
+spring:
+  application:
+    name: audit
+  server:
+    port: 0
+  eureka:
+    client:
+      serviceUrl:
+        defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+    instance:
+      preferIpAddress: true
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=otus-audit
+    username: postgres
+    password: example
+  flyway:
+    baselineOnMigrate: true
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+  kafka:
+    consumer:
+      reconnect-backoff-ms-config: 1000
+      reconnect-backoff-max-ms-config: 1000
+      auto-offset-reset: earliest
+      properties:
+        spring:
+          json:
+            use:
+              type:
+                headers: 'false'
+            value:
+              default:
+                type: ru.mts.smarthome.event.model.model.kafka.EventKafkaMessage
+      group-id: local-audit-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    bootstrap-servers: localhost:9092
+    properties:
+      spring:
+        json:
+          trusted:
+            packages: '*'
+  main:
+    allow-circular-references: true
+kafka:
+  audit:
+    topic: library-audit-topic

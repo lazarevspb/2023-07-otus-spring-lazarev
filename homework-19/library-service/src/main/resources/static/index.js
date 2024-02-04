@@ -19,6 +19,10 @@
                 templateUrl: 'home/home.html',
                 controller: 'homeController'
             })
+            .when('/about', {
+                templateUrl: 'about/about.html',
+                controller: 'aboutController'
+            })
             .when('/books', {
                 templateUrl: 'books/books.html',
                 controller: 'bookController'
@@ -43,6 +47,10 @@
             .when('/login', {
                 templateUrl: 'login/login.html',
                 controller: 'LoginController',
+            })
+            .when('/registration', {
+                templateUrl: 'registration/registration.html',
+                controller: 'RegistrationController',
             })
             .otherwise({
                 redirectTo: '/library/'

@@ -27,6 +27,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -77,7 +78,7 @@ class BookServiceImplTest {
         var bookDto = getBookDto();
         bookDto.setId(null);
 
-        service.saveBook(bookDto);
+        service.saveBook(bookDto, null);
 
         var savedBook = getBook();
         savedBook.setId(null);
@@ -90,7 +91,7 @@ class BookServiceImplTest {
         when(genreService.findByName(any())).thenReturn(getGenre());
         when(repository.findById(any())).thenReturn(Optional.of(getBook()));
 
-        service.updateBook(getBookDto());
+        service.updateBook(getBookDto(), null);
 
         verify(repository, times(1)).save(eq(getBook()));
         verify(repository, times(1)).findById(1L);
@@ -98,7 +99,7 @@ class BookServiceImplTest {
 
     @Test
     void deleteBookById() {
-        service.deleteBookById(Book_ID);
+        service.deleteBookById(Book_ID, null);
 
         //        verify(bookDao, times(1)).delete(book);
     }
@@ -107,7 +108,7 @@ class BookServiceImplTest {
     void getAllBook() {
         when(repository.findAll()).thenReturn(getBookList());
 
-        var actual = service.findAllBooks();
+        var actual = service.findAllBooks(anyLong());
 
         assertEquals(getBookList(), actual);
     }
@@ -116,7 +117,7 @@ class BookServiceImplTest {
     void findBookById() {
         when(repository.findById(eq(Book_ID))).thenReturn(Optional.of(getBook()));
 
-        var actual = service.findBookById(Book_ID);
+        var actual = service.findBookById(Book_ID, null);
 
         assertEquals(getBook(), actual);
     }
