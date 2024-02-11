@@ -12,7 +12,6 @@ zuul:
       path: /**
     store:
       path: /api/v1/**/**
-#      sensitiveHeaders: ""
   sensitiveHeaders: ""
 server:
   port: 8082

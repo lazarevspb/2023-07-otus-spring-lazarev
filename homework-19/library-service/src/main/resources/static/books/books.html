@@ -11,7 +11,7 @@
     </thead>
     <tbody>
 
-    <tr ng-repeat="b in books" ng-click="getBookPage(b.id)">
+    <tr ng-repeat="b in books" ng-click="isUserLoggedIn() && getBookPage(b.id)">
         <td>{{b.id}}</td>
         <td>{{b.title}}</td>
         <td>{{b.author}}</td>

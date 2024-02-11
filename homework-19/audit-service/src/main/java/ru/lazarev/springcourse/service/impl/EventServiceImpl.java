@@ -10,6 +10,7 @@ import ru.lazarev.springcourse.model.EventKafkaMessage;
 import ru.lazarev.springcourse.repositories.EventRepository;
 import ru.lazarev.springcourse.service.EventService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,9 +20,10 @@ public class EventServiceImpl implements EventService {
 
     EventRepository eventRepository;
     EventMapper mapper;
+
     @Override
-    public Optional<Event> find(String username) {
-        return Optional.empty();
+    public Optional<List<Event>> findEventsByUserId(Long userId) {
+        return eventRepository.findEventsByUserId(userId);
     }
 
     @Override
