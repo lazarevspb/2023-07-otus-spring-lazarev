@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
@@ -13,25 +14,34 @@ import ru.lazarev.springcourse.library.domain.Book;
 import ru.lazarev.springcourse.library.domain.Comment;
 import ru.lazarev.springcourse.library.domain.Genre;
 import ru.lazarev.springcourse.library.dto.BookDto;
-import ru.lazarev.springcourse.library.service.impl.BookServiceImpl;
+import ru.lazarev.springcourse.library.enums.AuditType;
+import ru.lazarev.springcourse.library.kafka.AuditKafkaProducer;
+import ru.lazarev.springcourse.library.kafka.message.AuditKafkaMessage;
 import ru.lazarev.springcourse.library.mapper.AuthorMapperImpl;
 import ru.lazarev.springcourse.library.mapper.GenreMapperImpl;
 import ru.lazarev.springcourse.library.repository.BookRepository;
 import ru.lazarev.springcourse.library.service.AuthorService;
 import ru.lazarev.springcourse.library.service.BookService;
 import ru.lazarev.springcourse.library.service.GenreService;
+import ru.lazarev.springcourse.library.service.impl.BookServiceImpl;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static ru.lazarev.springcourse.library.enums.AuditType.DELETE_BOOK;
+import static ru.lazarev.springcourse.library.enums.AuditType.GET_BOOK;
+import static ru.lazarev.springcourse.library.enums.AuditType.GET_LIST_BOOKS;
+import static ru.lazarev.springcourse.library.enums.AuditType.SAVE_BOOK;
+import static ru.lazarev.springcourse.library.enums.AuditType.UPDATE_BOOK;
 
 @ExtendWith({SpringExtension.class})
 @ContextConfiguration(classes = {BookServiceImpl.class, AuthorMapperImpl.class, GenreMapperImpl.class})
@@ -39,22 +49,14 @@ import static org.mockito.Mockito.when;
 class BookServiceImplTest {
 
     public static final String Book_NAME = "Book_name";
-
-    public static final long Book_ID = 1L;
-
+    public static final long BOOK_ID = 1L;
     public static final String AUTHOR_1 = "Author 1";
-
     public static final String GENRE_2 = "Genre 2";
-
     public static final String AUTHOR_NAME = "Author_name";
-
     public static final String GENRE_NAME = "Genre_name";
-
-    public static final String EXPECTED_LIST_STRING = "[Book(id=1, title=Book_name, author=Author(id=1, "
-        + "name=Author_name), genre=Genre(id=2, name=Genre_name), comments=[Comment(id=null, text=null)])]";
     public static final Long GENRE_ID = 2L;
-
     public static final Long AUTHOR_ID = 1L;
+    public static final long USER_ID = 111L;
 
     @MockBean
     BookRepository repository;
@@ -64,6 +66,8 @@ class BookServiceImplTest {
 
     @MockBean
     GenreService genreService;
+    @MockBean
+    AuditKafkaProducer producer;
 
 
     @Autowired
@@ -71,55 +75,111 @@ class BookServiceImplTest {
 
     @Test
     void saveBook() {
-        when(authorService.findByName(any())).thenReturn(getAuthor());
-        when(genreService.findByName(any())).thenReturn(getGenre());
-        when(repository.findById(any())).thenReturn(Optional.of(getBook()));
+        var uuid = UUID.randomUUID();
+        var mockedInstant = Instant.parse("2023-02-11T12:34:56Z");
+        try (var instantMock = Mockito.mockStatic(Instant.class);
+             var uuidMock = Mockito.mockStatic(UUID.class)) {
+            uuidMock.when(UUID::randomUUID).thenReturn(uuid);
+            instantMock.when(Instant::now).thenReturn(mockedInstant);
 
-        var bookDto = getBookDto();
-        bookDto.setId(null);
+            when(repository.save(any())).thenReturn(getBook());
+            when(authorService.findByName(any())).thenReturn(getAuthor());
+            when(genreService.findByName(any())).thenReturn(getGenre());
+            when(repository.findById(any())).thenReturn(Optional.of(getBook()));
 
-        service.saveBook(bookDto, null);
+            var bookDto = getBookDto();
+            bookDto.setId(null);
 
-        var savedBook = getBook();
-        savedBook.setId(null);
-        verify(repository, times(1)).save(eq((savedBook)));
+            var book = service.saveBook(bookDto, USER_ID);
+
+            book.setId(null);
+            verify(repository, times(1)).save(eq((book)));
+            verify(producer, times(1)).publish(getAuditKafkaMessage(111L, BOOK_ID, SAVE_BOOK, uuid.toString()));
+        }
     }
 
     @Test
     void updateBook() {
-        when(authorService.findByName(any())).thenReturn(getAuthor());
-        when(genreService.findByName(any())).thenReturn(getGenre());
-        when(repository.findById(any())).thenReturn(Optional.of(getBook()));
+        var uuid = UUID.randomUUID();
+        var mockedInstant = Instant.parse("2023-02-11T12:34:56Z");
+        try (var instantMock = Mockito.mockStatic(Instant.class);
+             var uuidMock = Mockito.mockStatic(UUID.class)) {
+            uuidMock.when(UUID::randomUUID).thenReturn(uuid);
+            instantMock.when(Instant::now).thenReturn(mockedInstant);
 
-        service.updateBook(getBookDto(), null);
+            when(repository.save(any())).thenReturn(getBook());
+            when(authorService.findByName(any())).thenReturn(getAuthor());
+            when(genreService.findByName(any())).thenReturn(getGenre());
+            when(repository.findById(any())).thenReturn(Optional.of(getBook()));
 
-        verify(repository, times(1)).save(eq(getBook()));
-        verify(repository, times(1)).findById(1L);
+            service.updateBook(getBookDto(), USER_ID);
+
+            verify(repository, times(1)).save(eq(getBook()));
+            verify(repository, times(1)).findById(1L);
+            verify(producer, times(1)).publish(getAuditKafkaMessage(111L, BOOK_ID, UPDATE_BOOK, uuid.toString()));
+        }
     }
 
     @Test
     void deleteBookById() {
-        service.deleteBookById(Book_ID, null);
+        var uuid = UUID.randomUUID();
+        var mockedInstant = Instant.parse("2023-02-11T12:34:56Z");
+        try (var instantMock = Mockito.mockStatic(Instant.class);
+             var uuidMock = Mockito.mockStatic(UUID.class)) {
+            uuidMock.when(UUID::randomUUID).thenReturn(uuid);
+            instantMock.when(Instant::now).thenReturn(mockedInstant);
+            when(repository.findById(BOOK_ID)).thenReturn(Optional.of(getBook()));
 
-        //        verify(bookDao, times(1)).delete(book);
+            service.deleteBookById(BOOK_ID, USER_ID);
+
+            verify(repository, times(1)).delete(getBook());
+            verify(producer, times(1)).publish(getAuditKafkaMessage(111L, BOOK_ID, DELETE_BOOK, uuid.toString()));
+        }
+    }
+
+    @Test
+    void not_send_kafka_message_if_book_not_found() {
+        when(repository.findById(BOOK_ID)).thenReturn(Optional.empty());
+
+        service.deleteBookById(BOOK_ID, USER_ID);
+
+        verify(repository, times(0)).delete(any());
+        verify(producer, times(0)).publish(any());
     }
 
     @Test
     void getAllBook() {
-        when(repository.findAll()).thenReturn(getBookList());
+        var uuid = UUID.randomUUID();
+        var mockedInstant = Instant.parse("2023-02-11T12:34:56Z");
+        try (var instantMock = Mockito.mockStatic(Instant.class);
+             var uuidMock = Mockito.mockStatic(UUID.class)) {
+            uuidMock.when(UUID::randomUUID).thenReturn(uuid);
+            instantMock.when(Instant::now).thenReturn(mockedInstant);
 
-        var actual = service.findAllBooks(anyLong());
+            when(repository.findAll()).thenReturn(getBookList());
 
-        assertEquals(getBookList(), actual);
+            var actual = service.findAllBooks(USER_ID);
+
+            assertEquals(getBookList(), actual);
+            verify(producer, times(1)).publish(getAuditKafkaMessage(111L, null, GET_LIST_BOOKS, uuid.toString()));
+        }
     }
 
     @Test
     void findBookById() {
-        when(repository.findById(eq(Book_ID))).thenReturn(Optional.of(getBook()));
+        var uuid = UUID.randomUUID();
+        var mockedInstant = Instant.parse("2023-02-11T12:34:56Z");
+        try (var instantMock = Mockito.mockStatic(Instant.class);
+             var uuidMock = Mockito.mockStatic(UUID.class)) {
+            uuidMock.when(UUID::randomUUID).thenReturn(uuid);
+            instantMock.when(Instant::now).thenReturn(mockedInstant);
+            when(repository.findById(eq(BOOK_ID))).thenReturn(Optional.of(getBook()));
 
-        var actual = service.findBookById(Book_ID, null);
+            var actual = service.findBookById(BOOK_ID, USER_ID);
 
-        assertEquals(getBook(), actual);
+            assertEquals(getBook(), actual);
+            verify(producer, times(1)).publish(getAuditKafkaMessage(111L, BOOK_ID, GET_BOOK, uuid.toString()));
+        }
     }
 
     private List<Book> getBookList() {
@@ -133,12 +193,12 @@ class BookServiceImplTest {
     }
 
     private Book getBook() {
-        return new Book(Book_ID, Book_NAME, getAuthor(), getGenre(), List.of(new Comment()));
+        return new Book(BOOK_ID, Book_NAME, getAuthor(), getGenre(), List.of(new Comment()));
     }
 
 
     private BookDto getBookDto() {
-        return new BookDto(Book_ID, Book_NAME, AUTHOR_1, GENRE_2);
+        return new BookDto(BOOK_ID, Book_NAME, AUTHOR_1, GENRE_2);
     }
 
     private Genre getGenre() {
@@ -149,7 +209,14 @@ class BookServiceImplTest {
         return new Author(AUTHOR_ID, AUTHOR_NAME);
     }
 
-    private String getBookListString() {
-        return EXPECTED_LIST_STRING;
+    private AuditKafkaMessage getAuditKafkaMessage(Long userId, Long bookId, AuditType eventType, String uuid) {
+        return AuditKafkaMessage.builder()
+            .eventId(uuid)
+            .eventType(eventType)
+            .timestamp(Instant.now().toEpochMilli())
+            .message(AuditKafkaMessage.AuditEventMessage.builder()
+                         .userId(userId)
+                         .bookId(bookId)
+                         .build()).build();
     }
 }

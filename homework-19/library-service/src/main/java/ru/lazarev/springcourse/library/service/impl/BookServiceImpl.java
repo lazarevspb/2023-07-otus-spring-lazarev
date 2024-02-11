@@ -105,9 +105,11 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteBookById(Long bookId, Long userId) {
-        auditKafkaProducer.publish(getAuditKafkaMessage(userId, bookId, DELETE_BOOK));
         repository.findById(bookId)
-            .ifPresent(repository::delete);
+            .ifPresent(entity -> {
+                repository.delete(entity);
+                auditKafkaProducer.publish(getAuditKafkaMessage(userId, bookId, DELETE_BOOK));
+            });
     }
 
 
