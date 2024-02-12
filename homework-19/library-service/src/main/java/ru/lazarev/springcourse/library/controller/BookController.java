@@ -36,7 +36,6 @@ public class BookController {
     BookMapper bookMapper;
     ContentService contentService;
 
-
     @GetMapping("/content/{id}")
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ResponseEntity<?> getContentByBookId(UserProfile userProfile, @PathVariable Long id) {
@@ -47,8 +46,6 @@ public class BookController {
     @Secured({"ROLE_USER", "ROLE_GUEST", "ROLE_ADMIN"})
     public ResponseEntity<List<BookDto>> getAllBooks(UserProfile userProfile,
                                                      @RequestHeader(value = "Authorization", required = false) String authorization) {
-        System.out.println("authorization = " + authorization);
-        System.out.println("userProfile = " + userProfile);
         var books = bookService.findAllBooks(userProfile.getUserId()).stream()
             .map(bookMapper::map).collect(Collectors.toList());
         return ResponseEntity.ok(books);
