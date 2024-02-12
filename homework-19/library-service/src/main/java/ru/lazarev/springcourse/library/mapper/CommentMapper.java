@@ -11,4 +11,8 @@ public interface CommentMapper {
 
     @Mapping(target = "id", source = "commentDto.id")
     Comment map(CommentDto commentDto, Book book);
+
+    @Mapping(target = "bookId", source = "comment.book.id")
+    @Mapping(target = "userName", source = "userName")
+    CommentDto map(Comment comment, String userName);
 }

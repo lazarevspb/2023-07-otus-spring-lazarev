@@ -13,6 +13,8 @@ public interface UserService extends UserDetailsService {
 
     Optional<User> findByUsername(String username);
 
+    Optional<User> findById(Long id);
+
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 
     User createNewUser(RegistrationUserDto registrationUserDto);

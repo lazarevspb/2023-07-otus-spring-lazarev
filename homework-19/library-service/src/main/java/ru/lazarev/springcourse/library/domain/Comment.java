@@ -27,6 +27,9 @@ public class Comment {
     @Column(name = "text", nullable = false)
     private String text;
 
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
+
     @ManyToOne
     @JoinColumn(name = "book_id")
     @ToString.Exclude
