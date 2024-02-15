@@ -1,4 +1,4 @@
-package ru.lazarev.springcourse.dto;
+package ru.lazarev.springcourse.dtos;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -8,9 +8,8 @@ import lombok.experimental.FieldDefaults;
 @Data
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AuthorDto {
-
+public class EventDto {
     Long id;
-
-    String name;
+    String username;
+    String email;
 }

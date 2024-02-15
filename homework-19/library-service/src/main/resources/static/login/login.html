@@ -1,0 +1,24 @@
+<form class="align-middle" ng-submit="tryToAuth()" ng-show="!isUserLoggedIn()" style="display: flex; flex-direction: column; margin-top: 20px;">
+    <div class="input-group-prepend">
+        <input id="navLoginField" class="form-control" ng-model="user.username" type="text"
+               aria-describedby="inputGroup-sizing-sm" style="margin-left: 10px; margin-bottom: 10px; width: 200px;">
+    </div>
+
+    <div class="input-group-prepend">
+        <input id="navPasswordField" class="form-control" ng-model="user.password" type="password"
+               aria-describedby="inputGroup-sizing-sm" style="margin-left: 10px; margin-bottom: 10px; width: 200px;">
+    </div>
+
+    <button id="navLoginSubmit" class="btn btn-outline-warning btn-sm"
+            style="margin-left: 10px; width: 200px;" type="submit">ENTER
+    </button>
+
+</form>
+
+<div class="nav-item" ng-show="isUserLoggedIn()">
+    <span>Welcome {{currentUserName}}!</span>
+</div>
+<br>
+
+<button class="btn btn-primary" ng-show="!isUserLoggedIn()" style="margin-left: 10px; width: 200px;"
+        ng-click="getRegistrationPage()">Or sign up</button>

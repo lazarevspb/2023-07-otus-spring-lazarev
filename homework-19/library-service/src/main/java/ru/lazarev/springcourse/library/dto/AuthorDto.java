@@ -1,4 +1,4 @@
-package ru.lazarev.springcourse.dto;
+package ru.lazarev.springcourse.library.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

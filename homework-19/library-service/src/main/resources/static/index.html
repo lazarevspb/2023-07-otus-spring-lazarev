@@ -5,6 +5,7 @@
 <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/library/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 
@@ -26,9 +27,22 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#!/books">Books</a>
+                    </li >
+                    <li class="nav-item" ng-show="!isUserLoggedIn()">
+                        <a class="nav-link" href="#!/login">Login or register</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#!/home">About</a>
+                        <a class="nav-link" href="#!/about">About</a>
+                    </li>
+
+                    <li class="nav-item" ng-if="isUserLoggedIn()">
+                        <button class="btn btn-outline-secondary" ng-click="tryToLogout()">Выйти</button>
+                    </li>
+<!--                    <li class="nav-item" ng-if="isUserLoggedIn()">-->
+<!--                        <button class="btn btn-outline-secondary" ng-click="tryToLogout()">{{currentUserName}}</button>-->
+<!--                    </li>-->
+                    <li class="nav-item" ng-show="isUserLoggedIn()">
+                        <span>{{currentUserName}}</span>
                     </li>
                 </ul>
             </div>
@@ -38,11 +52,15 @@
     <ng-view></ng-view>
 
     <script src="index.js"></script>
-    <script src="home/about.js"></script>
+    <script src="home/home.js"></script>
+    <script src="about/about.js"></script>
     <script src="edit/edit.js"></script>
     <script src="books/books.js"></script>
     <script src="add/add.js"></script>
     <script src="details/details.js"></script>
+    <script src="content/content.js"></script>
+    <script src="login/login.js"></script>
+    <script src="registration/registration.js"></script>
 
 </div>
 </body>

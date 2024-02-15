@@ -1,0 +1,27 @@
+<h3>Book List</h3>
+<table class="table table-hover" cellpadding="0" cellspacing="0">
+    <thead>
+    <tr>
+        <td>id</td>
+        <td>Title</td>
+        <td>Author</td>
+        <td>Genre</td>
+        <td ng-show= "isUserLoggedIn()">Action</td>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr ng-repeat="b in books" ng-click="isUserLoggedIn() && getBookPage(b.id)">
+        <td>{{b.id}}</td>
+        <td>{{b.title}}</td>
+        <td>{{b.author}}</td>
+        <td>{{b.genre}}</td>
+        <td>
+            <button class="btn btn-primary" ng-show= "isUserLoggedIn()" ng-click="editBook(b.id)">Edit</button>
+            <button class="btn btn-primary" ng-show= "isUserLoggedIn()" ng-click="deleteBook(b.id)">delete</button>
+        </td>
+    </tr>
+    </tbody>
+
+</table>
+<button class="btn btn-primary" ng-show= "isUserLoggedIn()" ng-click="getAddBookPage()">Add Book</button>

@@ -1,0 +1,19 @@
+spring:
+  data:
+    mongodb:
+      port: 0
+      database: otus
+
+mongock:
+  runner-type: "InitializingBean"
+  change-logs-scan-package: ru.lazarev.springcourse.db.migration
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
+
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 4.0.2
